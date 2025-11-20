@@ -13,6 +13,54 @@ export const PALETTE_COLORS = [
   '#20B2AA', // LightSeaGreen
   '#FF69B4', // HotPink
   '#CD853F', // Peru
+  '#FF0000', // Red
+  '#00FF00', // Lime
+  '#0000FF', // Blue
+  '#FFFF00', // Yellow
+  '#00FFFF', // Cyan
+  '#FF00FF', // Magenta
+  '#C0C0C0', // Silver
+  '#808080', // Gray
+  '#800000', // Maroon
+  '#808000', // Olive
+  '#008000', // Green
+  '#800080', // Purple
+  '#008080', // Teal
+  '#000080', // Navy
+  '#FA8072', // Salmon
+  '#F0E68C', // Khaki
+  '#E6E6FA', // Lavender
+  '#DDA0DD', // Plum
+  '#B0E0E6', // PowderBlue
+  '#FFDAB9', // PeachPuff
+  '#F5DEB3', // Wheat
+  '#D2691E', // Chocolate
+  '#A0522D', // Sienna
+  '#4682B4', // SteelBlue
+  '#5F9EA0', // CadetBlue
+  '#7B68EE', // MediumSlateBlue
+  '#6A5ACD', // SlateBlue
+  '#483D8B', // DarkSlateBlue
+  '#2F4F4F', // DarkSlateGray
+  '#BC8F8F', // RosyBrown
+  '#F4A460', // SandyBrown
+  '#DAA520', // Goldenrod
+  '#B8860B', // DarkGoldenrod
+  '#32CD32', // LimeGreen
+  '#228B22', // ForestGreen
+  '#006400', // DarkGreen
+  '#66CDAA', // MediumAquamarine
+  '#00CED1', // DarkTurquoise
+  '#1E90FF', // DodgerBlue
+  '#4169E1', // RoyalBlue
+  '#0000CD', // MediumBlue
+  '#191970', // MidnightBlue
+  '#8A2BE2', // BlueViolet
+  '#9400D3', // DarkViolet
+  '#9932CC', // DarkOrchid
+  '#8B008B', // DarkMagenta
+  '#C71585', // MediumVioletRed
+  '#DB7093', // PaleVioletRed
 ];
 
 // Helper to create consistent line-art style images

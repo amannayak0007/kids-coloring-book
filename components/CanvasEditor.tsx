@@ -128,13 +128,13 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
 
       {/* Palette Footer */}
       <div className="bg-black/20 p-3 pb-6 backdrop-blur-sm z-20">
-        <div className="flex flex-wrap justify-center gap-1 sm:gap-2 max-w-4xl mx-auto">
+        <div className="flex overflow-x-auto py-4 gap-3 max-w-4xl mx-auto px-4 scrollbar-hide mask-linear-fade items-center">
             {PALETTE_COLORS.map((color) => (
               <button
                 key={color}
                 onClick={() => setSelectedColor(color)}
                 className={`
-                  w-10 h-10 sm:w-12 sm:h-12 rounded-md shadow-sm transition-transform duration-100 border-2 border-white/30
+                  flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-md shadow-sm transition-transform duration-100 border-2 border-white/30
                   ${selectedColor === color ? 'scale-110 ring-4 ring-white z-10' : 'hover:scale-105'}
                 `}
                 style={{ backgroundColor: color }}

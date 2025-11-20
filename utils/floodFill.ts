@@ -43,6 +43,12 @@ export function floodFill(
       return;
   }
 
+  // Heuristic to detect if we are starting from a grayscale color (like white canvas)
+  const isStartGrayscale = 
+      Math.abs(startR - startG) < 20 && 
+      Math.abs(startG - startB) < 20 && 
+      Math.abs(startR - startB) < 20;
+
   const stack: [number, number][] = [[startX, startY]];
   const seen = new Uint8Array(width * height); 
 
@@ -57,12 +63,22 @@ export function floodFill(
     const g = data[offset + 1];
     const b = data[offset + 2];
     
+    // Check if pixel is grayscale (to handle anti-aliasing edges of black lines)
+    const isPixelGrayscale = 
+      Math.abs(r - g) < 20 && 
+      Math.abs(g - b) < 20 && 
+      Math.abs(r - b) < 20;
+
+    // If both start and current pixel are grayscale, we can use a higher tolerance
+    // to fill closer to the black lines (reducing white halo)
+    const effectiveTolerance = (isStartGrayscale && isPixelGrayscale) ? 150 : tolerance;
+
     // Check if pixel color matches the START color (the color we clicked on)
     // This ensures we only fill the specific white (or other color) area we clicked
     const matchesStartColor = 
-      Math.abs(r - startR) <= tolerance &&
-      Math.abs(g - startG) <= tolerance &&
-      Math.abs(b - startB) <= tolerance;
+      Math.abs(r - startR) <= effectiveTolerance &&
+      Math.abs(g - startG) <= effectiveTolerance &&
+      Math.abs(b - startB) <= effectiveTolerance;
 
     // Strict Boundary check: Stop at dark pixels
     const isBoundary = r < 90 && g < 90 && b < 90; 
