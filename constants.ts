@@ -172,5 +172,77 @@ export const CATEGORIES: Category[] = [
       imageSrc: `/Vehicle/V_big_${i + 1}.png`,
       thumbnailSrc: `/Vehicle/V_big_${i + 1}.png`
     }))
+  },
+  {
+    id: 'mandala',
+    title: 'Coloring Mandala',
+    colorTheme: 'text-purple-600',
+    bgTheme: 'bg-purple-50',
+    items: Array.from({ length: 11 }, (_, i) => ({
+      id: `mandala_big_${i + 1}`,
+      title: `Mandala ${i + 1}`,
+      imageSrc: `/Mandala/Big/Mandala_big_${i + 1}.png`,
+      thumbnailSrc: `/Mandala/Big/Mandala_big_${i + 1}.png`
+    }))
+  },
+  {
+    id: 'culture',
+    title: 'Coloring Culture',
+    colorTheme: 'text-rose-600',
+    bgTheme: 'bg-rose-50',
+    items: Array.from({ length: 15 }, (_, i) => ({
+      id: `culture_big_${i + 1}`,
+      title: `Culture ${i + 1}`,
+      imageSrc: `/Culture/Big/Culture_big_${i + 1}.png`,
+      thumbnailSrc: `/Culture/Big/Culture_big_${i + 1}.png`
+    }))
+  },
+  {
+    id: 'landmark',
+    title: 'Coloring Landmark',
+    colorTheme: 'text-cyan-600',
+    bgTheme: 'bg-cyan-50',
+    items: Array.from({ length: 14 }, (_, i) => ({
+      id: `landmark_big_${i + 1}`,
+      title: `Landmark ${i + 1}`,
+      imageSrc: `/Landmark/Big/Landmark_big_${i + 1}.png`,
+      thumbnailSrc: `/Landmark/Big/Landmark_big_${i + 1}.png`
+    }))
+  },
+  {
+    id: 'madhubani',
+    title: 'Coloring Madhubani',
+    colorTheme: 'text-teal-600',
+    bgTheme: 'bg-teal-50',
+    items: Array.from({ length: 6 }, (_, i) => ({
+      id: `madhubani_big_${i + 1}`,
+      title: `Madhubani ${i + 1}`,
+      imageSrc: `/Madhubani/Big/Madhubani_big_${i + 1}.png`,
+      thumbnailSrc: `/Madhubani/Big/Madhubani_big_${i + 1}.png`
+    }))
+  },
+  {
+    id: 'origami',
+    title: 'Coloring Origami',
+    colorTheme: 'text-sky-600',
+    bgTheme: 'bg-sky-50',
+    items: Array.from({ length: 20 }, (_, i) => ({
+      id: `origami_big_${i + 1}`,
+      title: `Origami ${i + 1}`,
+      imageSrc: `/Origami/Big/Origami_big_${i + 1}.png`,
+      thumbnailSrc: `/Origami/Big/Origami_big_${i + 1}.png`
+    }))
+  },
+  {
+    id: 'outdoor',
+    title: 'Coloring Outdoor',
+    colorTheme: 'text-lime-600',
+    bgTheme: 'bg-lime-50',
+    items: Array.from({ length: 8 }, (_, i) => ({
+      id: `outdoor_big_${i + 1}`,
+      title: `Outdoor ${i + 1}`,
+      imageSrc: `/Outdoor/Big/Outdoor_big_${i + 1}.png`,
+      thumbnailSrc: `/Outdoor/Big/Outdoor_big_${i + 1}.png`
+    }))
   }
 ];
