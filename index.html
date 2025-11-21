@@ -86,99 +86,176 @@
       }
     }
     </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      /* Custom scrollbar for a more playful look */
-      ::-webkit-scrollbar {
-        width: 12px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #f1f1f1; 
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #fb923c; 
-        border-radius: 6px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #ea580c; 
-      }
       body {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
-        background-size: 400% 400%;
-        animation: gradientShift 20s ease infinite;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        background: #f5f5f7;
+        font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'Roboto', sans-serif;
         min-height: 100vh;
         position: relative;
         overflow-x: hidden;
+        color: #1d1d1f;
       }
       
-      /* Modern animated gradient background */
-      @keyframes gradientShift {
-        0% {
-          background-position: 0% 50%;
-        }
-        50% {
-          background-position: 100% 50%;
-        }
-        100% {
-          background-position: 0% 50%;
-        }
+      /* Hand cursor for interactive elements */
+      button, a, [role="button"], .cursor-pointer, img, .card-hover, .color-button {
+        cursor: pointer;
       }
       
-      /* Modern floating shapes with glassmorphism */
-      body::before {
-        content: '';
-        position: fixed;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: 
-          radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
-          radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.12) 0%, transparent 50%),
-          radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-        animation: floatShapes 25s ease-in-out infinite;
-        pointer-events: none;
-        z-index: 0;
-        filter: blur(60px);
+      /* Hand cursor for canvas */
+      canvas {
+        cursor: pointer;
       }
       
-      @keyframes floatShapes {
-        0%, 100% {
-          transform: translate(0, 0) rotate(0deg) scale(1);
-        }
-        33% {
-          transform: translate(50px, -50px) rotate(120deg) scale(1.1);
-        }
-        66% {
-          transform: translate(-30px, 30px) rotate(240deg) scale(0.9);
-        }
+      h1, h2, h3 {
+        font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-weight: 600;
+        letter-spacing: -0.3px;
       }
       
-      /* Ensure content is above the animated background */
+      .font-rounded {
+        font-family: 'Nunito', sans-serif;
+      }
+      
+      /* Ensure content is above the background */
       #root {
         position: relative;
         z-index: 1;
       }
       
-      /* Add some sparkle effects for extra fun */
-      @keyframes sparkle {
-        0%, 100% {
-          opacity: 0;
-          transform: scale(0) translateY(0);
-        }
-        50% {
-          opacity: 1;
-          transform: scale(1) translateY(-20px);
-        }
-      }
-      
-      /* Modern smooth transitions */
+      /* Smooth transitions */
       * {
         transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
                     color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
                     transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                    opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      /* Fade in animation */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      /* Slide in from left */
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      
+      /* Slide in from right */
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      
+      /* Scale in animation */
+      @keyframes scaleIn {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      
+      /* Bounce animation for buttons */
+      @keyframes bounce {
+        0%, 100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-3px);
+        }
+      }
+      
+      /* Pulse animation */
+      @keyframes pulse {
+        0%, 100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+      
+      /* Animation classes */
+      .animate-fade-in {
+        animation: fadeIn 0.5s ease-out forwards;
+      }
+      
+      .animate-slide-in-left {
+        animation: slideInLeft 0.5s ease-out forwards;
+      }
+      
+      .animate-slide-in-right {
+        animation: slideInRight 0.5s ease-out forwards;
+      }
+      
+      .animate-scale-in {
+        animation: scaleIn 0.4s ease-out forwards;
+      }
+      
+      .animate-bounce-subtle:hover {
+        animation: bounce 0.6s ease infinite;
+      }
+      
+      /* Stagger animation for grid items */
+      .grid-item {
+        opacity: 0;
+        animation: fadeIn 0.5s ease-out forwards;
+      }
+      
+      /* Smooth button press */
+      button:active {
+        transform: scale(0.95);
+      }
+      
+      /* Smooth card hover */
+      .card-hover {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      .card-hover:hover {
+        transform: translateY(-4px) scale(1.02);
+      }
+      
+      /* Smooth color selection */
+      .color-button {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      .color-button:hover {
+        transform: scale(1.1);
+      }
+      
+      .color-button.selected {
+        animation: pulse 2s ease-in-out infinite;
       }
       
       /* Modern scrollbar */
@@ -187,16 +264,14 @@
         height: 10px;
       }
       ::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 10px;
+        background: transparent;
       }
       ::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.3);
+        background: rgba(0, 0, 0, 0.2);
         border-radius: 10px;
-        backdrop-filter: blur(10px);
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: rgba(255, 255, 255, 0.5);
+        background: rgba(0, 0, 0, 0.3);
       }
       @font-face {
         font-family: 'Comic Sans MS';

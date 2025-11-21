@@ -271,59 +271,59 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
 
 
   return (
-    <div className="flex flex-col h-screen max-h-screen overflow-hidden bg-gradient-to-br from-purple-200/70 via-pink-100/70 to-blue-200/70 backdrop-blur-md">
-      {/* Modern Top Control Bar with Glassmorphism */}
-      <div className="bg-white/15 backdrop-blur-xl p-3 sm:p-4 flex items-center justify-between border-b border-white/20 shadow-xl z-10 flex-wrap gap-3">
-        <div className="flex gap-2">
+    <div className="flex flex-col h-screen max-h-screen overflow-hidden bg-gray-50">
+      {/* Modern Top Control Bar */}
+      <div className="bg-white/80 backdrop-blur-xl border-b border-gray-200/50 p-4 sm:p-5 flex items-center justify-between z-10 flex-wrap gap-3 shadow-sm animate-slide-in-left">
+        <div className="flex gap-3">
           <button 
             onClick={onBack}
-            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-2.5 rounded-xl font-semibold flex items-center gap-2 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 border border-white/30"
+            className="bg-gray-900 hover:bg-gray-800 text-white px-5 py-2.5 rounded-full font-medium flex items-center gap-2 shadow-sm hover:shadow-md transition-all font-rounded"
           >
-            <Home size={20} strokeWidth={2.5} />
+            <Home size={18} />
             <span className="text-sm sm:text-base hidden sm:inline">Home</span>
           </button>
 
           <button 
             onClick={handleUndo}
             disabled={!canUndo}
-            className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-3 py-2.5 rounded-xl font-semibold flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 border border-white/30 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
+            className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all disabled:opacity-30 disabled:cursor-not-allowed font-rounded"
           >
-            <Undo size={20} strokeWidth={2.5} />
+            <Undo size={18} />
             <span className="text-sm sm:text-base hidden sm:inline">Undo</span>
           </button>
 
           <button 
             onClick={handleRedo}
             disabled={!canRedo}
-            className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white px-3 py-2.5 rounded-xl font-semibold flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 border border-white/30 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
+            className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all disabled:opacity-30 disabled:cursor-not-allowed font-rounded"
           >
-            <Redo size={20} strokeWidth={2.5} />
+            <Redo size={18} />
             <span className="text-sm sm:text-base hidden sm:inline">Redo</span>
           </button>
         </div>
         
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-3 flex-wrap">
           <button 
             onClick={initCanvas}
-            className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-3 py-2.5 rounded-xl font-semibold flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 border border-white/30"
+            className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all font-rounded"
           >
-            <Eraser size={20} strokeWidth={2.5} />
+            <Eraser size={18} />
             <span className="text-sm sm:text-base hidden sm:inline">Clear</span>
           </button>
 
           <button 
             onClick={handleDownload}
-            className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-4 py-2.5 rounded-xl font-semibold flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 border border-white/30"
+            className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all"
           >
-            <Download size={20} strokeWidth={2.5} />
+            <Download size={18} />
             <span className="text-sm sm:text-base hidden sm:inline">Save</span>
           </button>
 
           <button 
             onClick={handlePrint}
-            className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white px-4 py-2.5 rounded-xl font-semibold flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 border border-white/30"
+            className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all"
           >
-            <Printer size={20} strokeWidth={2.5} />
+            <Printer size={18} />
             <span className="text-sm sm:text-base hidden sm:inline">Print</span>
           </button>
         </div>
@@ -332,11 +332,11 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
       {/* Modern Main Canvas Area */}
       <div className="flex-1 relative flex items-center justify-center p-4 sm:p-6 overflow-auto" ref={containerRef}>
         <div 
-          className="relative shadow-2xl bg-white rounded-3xl overflow-hidden border-4 border-white/40 shadow-2xl"
+          className="relative bg-white rounded-3xl overflow-hidden border border-gray-200/50 shadow-2xl animate-scale-in"
           style={{
             transform: `scale(${zoom})`,
             transformOrigin: 'center',
-            transition: 'transform 0.2s ease',
+            transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
             width: 'min(90vw, 90vh)',
             height: 'min(90vw, 90vh)',
             maxWidth: '800px',
@@ -352,21 +352,24 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
         </div>
       </div>
 
-      {/* Modern Palette Footer with Glassmorphism */}
-      <div className="bg-white/15 backdrop-blur-xl p-4 sm:p-5 pb-8 border-t border-white/20 shadow-2xl z-20">
-        <div className="flex overflow-x-auto py-4 gap-3 sm:gap-4 max-w-5xl mx-auto px-4 scrollbar-hide mask-linear-fade items-center">
-          {PALETTE_COLORS.map((color) => (
+      {/* Modern Palette Footer */}
+      <div className="bg-white/80 backdrop-blur-xl border-t border-gray-200/50 p-5 sm:p-6 z-20 shadow-sm animate-slide-in-right">
+        <div className="flex overflow-x-auto py-2 gap-3 max-w-5xl mx-auto px-4 scrollbar-hide items-center">
+          {PALETTE_COLORS.map((color, index) => (
             <button
               key={color}
               onClick={() => handleColorChange(color)}
               className={`
-                flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl shadow-lg transition-all duration-300 border-2 border-white/40
+                flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full transition-all border-2 shadow-sm hover:shadow-md color-button grid-item
                 ${selectedColor === color 
-                  ? 'scale-125 ring-4 ring-white/80 shadow-2xl shadow-purple-500/50 z-10' 
-                  : 'hover:scale-110 hover:shadow-xl hover:border-white/60'
+                  ? 'ring-4 ring-gray-900 scale-110 border-gray-900' 
+                  : 'border-gray-200 hover:border-gray-300'
                 }
               `}
-              style={{ backgroundColor: color }}
+              style={{ 
+                backgroundColor: color,
+                animationDelay: `${index * 0.02}s`
+              }}
               title={color}
             />
           ))}
