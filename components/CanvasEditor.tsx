@@ -271,68 +271,68 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
 
 
   return (
-    <div className="flex flex-col h-screen max-h-screen overflow-hidden bg-[#8B5E6C]">
-      {/* Top Control Bar */}
-      <div className="bg-white/10 backdrop-blur-sm p-2 flex items-center justify-between border-b border-white/10 shadow-sm z-10 flex-wrap gap-2">
+    <div className="flex flex-col h-screen max-h-screen overflow-hidden bg-gradient-to-br from-purple-200/70 via-pink-100/70 to-blue-200/70 backdrop-blur-md">
+      {/* Modern Top Control Bar with Glassmorphism */}
+      <div className="bg-white/15 backdrop-blur-xl p-3 sm:p-4 flex items-center justify-between border-b border-white/20 shadow-xl z-10 flex-wrap gap-3">
         <div className="flex gap-2">
           <button 
             onClick={onBack}
-            className="bg-[#F4EBD0] hover:bg-[#e8debf] text-[#5D4037] px-4 py-2 rounded-lg font-black flex items-center gap-2 shadow-[0_4px_0_0_rgba(0,0,0,0.2)] active:translate-y-1 active:shadow-none transition-all border-2 border-[#5D4037]/20"
+            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-2.5 rounded-xl font-semibold flex items-center gap-2 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 border border-white/30"
           >
             <Home size={20} strokeWidth={2.5} />
-            <span className="font-comic text-sm sm:text-lg hidden sm:inline">home</span>
+            <span className="text-sm sm:text-base hidden sm:inline">Home</span>
           </button>
 
           <button 
             onClick={handleUndo}
             disabled={!canUndo}
-            className="bg-[#F4EBD0] hover:bg-[#e8debf] text-[#5D4037] px-3 py-2 rounded-lg font-black flex items-center gap-1 shadow-[0_4px_0_0_rgba(0,0,0,0.2)] active:translate-y-1 active:shadow-none transition-all border-2 border-[#5D4037]/20 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-3 py-2.5 rounded-xl font-semibold flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 border border-white/30 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
             <Undo size={20} strokeWidth={2.5} />
-            <span className="font-comic text-sm sm:text-lg hidden sm:inline">undo</span>
+            <span className="text-sm sm:text-base hidden sm:inline">Undo</span>
           </button>
 
           <button 
             onClick={handleRedo}
             disabled={!canRedo}
-            className="bg-[#F4EBD0] hover:bg-[#e8debf] text-[#5D4037] px-3 py-2 rounded-lg font-black flex items-center gap-1 shadow-[0_4px_0_0_rgba(0,0,0,0.2)] active:translate-y-1 active:shadow-none transition-all border-2 border-[#5D4037]/20 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white px-3 py-2.5 rounded-xl font-semibold flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 border border-white/30 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
             <Redo size={20} strokeWidth={2.5} />
-            <span className="font-comic text-sm sm:text-lg hidden sm:inline">redo</span>
+            <span className="text-sm sm:text-base hidden sm:inline">Redo</span>
           </button>
         </div>
         
         <div className="flex gap-2 flex-wrap">
           <button 
             onClick={initCanvas}
-            className="bg-[#F4EBD0] hover:bg-[#e8debf] text-[#5D4037] px-3 py-2 rounded-lg font-black flex items-center gap-1 shadow-[0_4px_0_0_rgba(0,0,0,0.2)] active:translate-y-1 active:shadow-none transition-all border-2 border-[#5D4037]/20"
+            className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-3 py-2.5 rounded-xl font-semibold flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 border border-white/30"
           >
             <Eraser size={20} strokeWidth={2.5} />
-            <span className="font-comic text-sm sm:text-lg hidden sm:inline">clean</span>
+            <span className="text-sm sm:text-base hidden sm:inline">Clear</span>
           </button>
 
           <button 
             onClick={handleDownload}
-            className="bg-[#9ACD32] hover:bg-[#8bc125] text-white px-3 py-2 rounded-lg font-black flex items-center gap-1 shadow-[0_4px_0_0_rgba(0,0,0,0.2)] active:translate-y-1 active:shadow-none transition-all border-2 border-white/20"
+            className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-4 py-2.5 rounded-xl font-semibold flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 border border-white/30"
           >
             <Download size={20} strokeWidth={2.5} />
-            <span className="font-comic text-sm sm:text-lg hidden sm:inline">save</span>
+            <span className="text-sm sm:text-base hidden sm:inline">Save</span>
           </button>
 
           <button 
             onClick={handlePrint}
-            className="bg-[#00BFFF] hover:bg-[#0099cc] text-white px-3 py-2 rounded-lg font-black flex items-center gap-1 shadow-[0_4px_0_0_rgba(0,0,0,0.2)] active:translate-y-1 active:shadow-none transition-all border-2 border-white/20"
+            className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white px-4 py-2.5 rounded-xl font-semibold flex items-center gap-1 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 border border-white/30"
           >
             <Printer size={20} strokeWidth={2.5} />
-            <span className="font-comic text-sm sm:text-lg hidden sm:inline">print</span>
+            <span className="text-sm sm:text-base hidden sm:inline">Print</span>
           </button>
         </div>
       </div>
 
-      {/* Main Canvas Area */}
-      <div className="flex-1 relative flex items-center justify-center p-4 overflow-auto" ref={containerRef}>
+      {/* Modern Main Canvas Area */}
+      <div className="flex-1 relative flex items-center justify-center p-4 sm:p-6 overflow-auto" ref={containerRef}>
         <div 
-          className="relative shadow-2xl bg-white rounded-xl overflow-hidden border-[4px] border-gray-200"
+          className="relative shadow-2xl bg-white rounded-3xl overflow-hidden border-4 border-white/40 shadow-2xl"
           style={{
             transform: `scale(${zoom})`,
             transformOrigin: 'center',
@@ -352,16 +352,19 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
         </div>
       </div>
 
-      {/* Palette Footer */}
-      <div className="bg-black/20 p-3 pb-6 backdrop-blur-sm z-20">
-        <div className="flex overflow-x-auto py-4 gap-3 max-w-4xl mx-auto px-4 scrollbar-hide mask-linear-fade items-center">
+      {/* Modern Palette Footer with Glassmorphism */}
+      <div className="bg-white/15 backdrop-blur-xl p-4 sm:p-5 pb-8 border-t border-white/20 shadow-2xl z-20">
+        <div className="flex overflow-x-auto py-4 gap-3 sm:gap-4 max-w-5xl mx-auto px-4 scrollbar-hide mask-linear-fade items-center">
           {PALETTE_COLORS.map((color) => (
             <button
               key={color}
               onClick={() => handleColorChange(color)}
               className={`
-                flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-md shadow-sm transition-transform duration-100 border-2 border-white/30
-                ${selectedColor === color ? 'scale-110 ring-4 ring-white z-10' : 'hover:scale-105'}
+                flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl shadow-lg transition-all duration-300 border-2 border-white/40
+                ${selectedColor === color 
+                  ? 'scale-125 ring-4 ring-white/80 shadow-2xl shadow-purple-500/50 z-10' 
+                  : 'hover:scale-110 hover:shadow-xl hover:border-white/60'
+                }
               `}
               style={{ backgroundColor: color }}
               title={color}

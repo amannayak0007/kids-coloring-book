@@ -20,10 +20,10 @@ const App: React.FC = () => {
           <main className="flex-grow">
             <Gallery onSelectPage={setSelectedPage} />
           </main>
-          {/* Simple Footer */}
-          <footer className="bg-black/10 text-white/60 py-4 text-center text-sm">
-            <p>© 2024 Coloring Book. All rights reserved.</p>
-            <p className="text-xs mt-1">Made with ❤️ for little artists</p>
+          {/* Modern Footer */}
+          <footer className="bg-white/10 backdrop-blur-xl border-t border-white/20 text-white/80 py-6 text-center">
+            <p className="text-sm font-medium">© 2024 Kids Coloring Web. All rights reserved.</p>
+            <p className="text-xs mt-2 text-white/60">Made with ❤️ for little artists</p>
           </footer>
         </>
       )}

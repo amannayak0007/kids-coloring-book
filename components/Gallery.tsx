@@ -24,24 +24,27 @@ export const Gallery: React.FC<GalleryProps> = ({ onSelectPage }) => {
   }, [selectedCategory]);
 
   return (
-    <div className="max-w-6xl mx-auto p-4 space-y-10 pb-20">
-      <div className="text-center mb-8">
-        <h2 className="text-xl md:text-2xl text-white font-bold drop-shadow-md font-comic">
-          Coloring Pages For Kids to color online !
-        </h2>
+    <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-12 pb-20">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-4 drop-shadow-2xl bg-gradient-to-r from-white via-purple-100 to-pink-100 bg-clip-text text-transparent">
+          Free Coloring Pages
+        </h1>
+        <p className="text-lg sm:text-xl text-white/90 font-medium max-w-2xl mx-auto">
+          Discover hundreds of beautiful coloring pages for kids. Color online, print, and share your artwork!
+        </p>
       </div>
 
-      {/* Filter Bar */}
-      <div className="bg-black/20 backdrop-blur-sm rounded-xl p-4 mb-6 border border-white/10">
+      {/* Modern Filter Bar with Glassmorphism */}
+      <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-5 sm:p-6 mb-8 border border-white/20 shadow-2xl">
         <div className="flex flex-col sm:flex-row gap-4">
           {/* Category Filter */}
-          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
             <button
               onClick={() => setSelectedCategory(null)}
-              className={`px-4 py-2 rounded-lg font-comic font-bold whitespace-nowrap transition-all ${
+              className={`px-6 py-3 rounded-xl font-semibold whitespace-nowrap transition-all duration-300 ${
                 selectedCategory === null
-                  ? 'bg-[#9ACD32] text-white shadow-md'
-                  : 'bg-white/10 text-white hover:bg-white/20'
+                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/50 scale-105'
+                  : 'bg-white/20 text-white hover:bg-white/30 hover:scale-105 backdrop-blur-sm'
               }`}
             >
               All
@@ -50,10 +53,10 @@ export const Gallery: React.FC<GalleryProps> = ({ onSelectPage }) => {
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`px-4 py-2 rounded-lg font-comic font-bold whitespace-nowrap transition-all ${
+                className={`px-6 py-3 rounded-xl font-semibold whitespace-nowrap transition-all duration-300 ${
                   selectedCategory === category.id
-                    ? 'bg-[#9ACD32] text-white shadow-md'
-                    : 'bg-white/10 text-white hover:bg-white/20'
+                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/50 scale-105'
+                    : 'bg-white/20 text-white hover:bg-white/30 hover:scale-105 backdrop-blur-sm'
                 }`}
               >
                 {category.title.replace('Coloring ', '')}
@@ -63,40 +66,43 @@ export const Gallery: React.FC<GalleryProps> = ({ onSelectPage }) => {
         </div>
       </div>
 
-      {/* Regular Categories */}
+      {/* Modern Categories with Glassmorphism */}
       {filteredCategories.map((category) => (
-        <div key={category.id} className="bg-black/10 rounded-xl p-6 backdrop-blur-sm border border-white/5">
-          <div className="flex justify-center mb-6">
-            <h3 className="text-2xl md:text-3xl font-extrabold text-white drop-shadow-md tracking-wide text-center">
+        <div key={category.id} className="bg-white/10 backdrop-blur-xl rounded-3xl p-6 sm:p-8 backdrop-blur-xl border border-white/20 shadow-2xl">
+          <div className="flex justify-center mb-8">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white drop-shadow-2xl text-center bg-gradient-to-r from-white to-purple-100 bg-clip-text text-transparent">
               {category.title}
-            </h3>
+            </h2>
           </div>
           
           {category.items.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
               {category.items.map((item) => (
                 <div 
                   key={item.id}
                   onClick={() => onSelectPage(item)}
-                  className="group cursor-pointer bg-white rounded-xl shadow-lg hover:shadow-2xl transform transition-all duration-200 border-[3px] border-orange-300 hover:border-orange-500 hover:scale-105 relative overflow-hidden"
+                  className="group cursor-pointer bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl hover:shadow-2xl transform transition-all duration-300 border-2 border-white/30 hover:border-purple-300 hover:scale-105 hover:-translate-y-2 relative overflow-hidden"
                 >
-                  <div className="aspect-square p-2 relative">
+                  <div className="aspect-square p-3 sm:p-4 relative">
                     <img 
                       src={item.thumbnailSrc} 
                       alt={item.title} 
-                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
                     />
                   </div>
                   
-                  {/* "Coloring" Label Overlay */}
-                  <div className="absolute top-0 right-0 bg-purple-100 text-purple-900 text-[10px] font-bold px-2 py-0.5 rounded-bl-lg border-b border-l border-purple-200 flex items-center gap-1">
-                    <span>Coloring</span> <Play size={8} fill="currentColor"/>
+                  {/* Modern Label Overlay */}
+                  <div className="absolute top-2 right-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-[10px] sm:text-xs font-bold px-2 py-1 rounded-lg shadow-lg flex items-center gap-1 backdrop-blur-sm">
+                    <span>Color</span> <Play size={10} fill="currentColor"/>
                   </div>
+                  
+                  {/* Hover glow effect */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-400/0 to-pink-400/0 group-hover:from-purple-400/10 group-hover:to-pink-400/10 transition-all duration-300 rounded-2xl"></div>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="text-center py-8 text-white/60 font-comic">
+            <div className="text-center py-12 text-white/70 font-medium text-lg">
               No coloring pages found in this category.
             </div>
           )}
