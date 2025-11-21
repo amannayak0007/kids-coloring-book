@@ -353,14 +353,14 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
       </div>
 
       {/* Modern Palette Footer */}
-      <div className="bg-white/80 backdrop-blur-xl border-t border-gray-200/50 p-5 sm:p-6 z-20 shadow-sm animate-slide-in-right">
-        <div className="flex overflow-x-auto py-2 gap-3 max-w-5xl mx-auto px-4 scrollbar-hide items-center">
+      <div className="bg-white/80 backdrop-blur-xl border-t border-gray-200/50 p-3 sm:p-4 z-20 shadow-sm animate-slide-in-right">
+        <div className="flex overflow-x-auto py-1 gap-2 sm:gap-3 max-w-5xl mx-auto px-3 sm:px-4 scrollbar-hide items-center">
           {PALETTE_COLORS.map((color, index) => (
             <button
               key={color}
               onClick={() => handleColorChange(color)}
               className={`
-                flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full transition-all border-2 shadow-sm hover:shadow-md color-button grid-item
+                flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full transition-all border-2 shadow-sm hover:shadow-md color-button grid-item
                 ${selectedColor === color 
                   ? 'ring-4 ring-gray-900 scale-110 border-gray-900' 
                   : 'border-gray-200 hover:border-gray-300'
