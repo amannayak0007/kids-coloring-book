@@ -32,6 +32,17 @@
       .font-comic {
         font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
       }
+      .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+      .mask-linear-fade {
+        mask-image: linear-gradient(to right, transparent, black 20px, black calc(100% - 20px), transparent);
+        -webkit-mask-image: linear-gradient(to right, transparent, black 20px, black calc(100% - 20px), transparent);
+      }
     </style>
   <script type="importmap">
 {
