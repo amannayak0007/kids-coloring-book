@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { ColoringPage } from '../types';
 import { PALETTE_COLORS } from '../constants';
 import { floodFill } from '../utils/floodFill';
-import { Home, Eraser, Download, Undo, Redo, ZoomIn, ZoomOut, Printer } from 'lucide-react';
+import { Home, Eraser, Download, Undo, Redo, Printer } from 'lucide-react';
 
 interface CanvasEditorProps {
   page: ColoringPage;
@@ -214,17 +214,6 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
     document.body.removeChild(link);
   };
 
-  const handleZoomIn = () => {
-    setZoom(prev => Math.min(prev + 0.25, 3));
-  };
-
-  const handleZoomOut = () => {
-    setZoom(prev => Math.max(prev - 0.25, 0.5));
-  };
-
-  const handleResetZoom = () => {
-    setZoom(1);
-  };
 
   const handleColorChange = (color: string) => {
     setSelectedColor(color);
@@ -314,28 +303,6 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
         </div>
         
         <div className="flex gap-2 flex-wrap">
-          {/* Zoom Controls */}
-          <div className="flex gap-1 bg-black/20 rounded-lg p-1">
-            <button
-              onClick={handleZoomOut}
-              className="bg-transparent hover:bg-white/10 text-white px-2 py-2 rounded-md transition-all"
-            >
-              <ZoomOut size={18} strokeWidth={2.5} />
-            </button>
-            <button
-              onClick={handleResetZoom}
-              className="bg-transparent hover:bg-white/10 text-white px-2 py-1 rounded-md transition-all font-comic text-xs"
-            >
-              {Math.round(zoom * 100)}%
-            </button>
-            <button
-              onClick={handleZoomIn}
-              className="bg-transparent hover:bg-white/10 text-white px-2 py-2 rounded-md transition-all"
-            >
-              <ZoomIn size={18} strokeWidth={2.5} />
-            </button>
-          </div>
-
           <button 
             onClick={initCanvas}
             className="bg-[#F4EBD0] hover:bg-[#e8debf] text-[#5D4037] px-3 py-2 rounded-lg font-black flex items-center gap-1 shadow-[0_4px_0_0_rgba(0,0,0,0.2)] active:translate-y-1 active:shadow-none transition-all border-2 border-[#5D4037]/20"
