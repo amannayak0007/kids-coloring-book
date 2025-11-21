@@ -272,6 +272,18 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
 
   return (
     <div className="flex flex-col h-screen max-h-screen overflow-hidden bg-gray-50">
+      <style>{`
+        .canvas-container {
+          width: min(80vw, 80vh);
+          height: min(80vw, 80vh);
+        }
+        @media (min-width: 640px) {
+          .canvas-container {
+            width: min(75vw, 75vh);
+            height: min(75vw, 75vh);
+          }
+        }
+      `}</style>
       {/* Modern Top Control Bar */}
       <div className="bg-white/80 backdrop-blur-xl border-b border-gray-200/50 p-4 sm:p-5 flex items-center justify-between z-10 flex-wrap gap-3 shadow-sm animate-slide-in-left">
         <div className="flex gap-3">
@@ -330,17 +342,15 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
       </div>
 
       {/* Modern Main Canvas Area */}
-      <div className="flex-1 relative flex items-center justify-center p-4 sm:p-6 overflow-auto" ref={containerRef}>
+      <div className="flex-1 relative flex items-center justify-center px-4 sm:px-6 py-8 sm:py-12 overflow-auto" ref={containerRef}>
         <div 
-          className="relative bg-white rounded-3xl overflow-hidden border border-gray-200/50 shadow-2xl animate-scale-in"
+          className="canvas-container relative bg-white rounded-3xl overflow-hidden border border-gray-200/50 shadow-2xl animate-scale-in"
           style={{
             transform: `scale(${zoom})`,
             transformOrigin: 'center',
             transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            width: 'min(90vw, 90vh)',
-            height: 'min(90vw, 90vh)',
-            maxWidth: '800px',
-            maxHeight: '800px'
+            maxWidth: '700px',
+            maxHeight: '700px'
           }}
         >
           <canvas 
