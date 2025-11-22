@@ -202,8 +202,6 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
 
     // Perform the fill first
     floodFill(ctx, coords.x, coords.y, selectedColor);
-    // Play sound effect
-    playFillSound();
     // Then save the new state AFTER the change
     saveToHistory();
   };
@@ -224,8 +222,6 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
 
     // Perform the fill first
     floodFill(ctx, coords.x, coords.y, selectedColor);
-    // Play sound effect
-    playFillSound();
     // Then save the new state AFTER the change
     saveToHistory();
   };
@@ -349,7 +345,10 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
       <div className="bg-white/80 backdrop-blur-xl border-b border-gray-200/50 top-bar-safe px-4 sm:px-5 flex items-center justify-between z-10 gap-3 shadow-sm animate-slide-in-left overflow-x-auto">
         <div className="flex gap-3 items-center flex-shrink-0">
           <button 
-            onClick={onBack}
+            onClick={() => {
+              playFillSound();
+              onBack();
+            }}
             className="bg-gray-900 hover:bg-gray-800 text-white px-5 py-2.5 rounded-full font-medium flex items-center gap-2 shadow-sm hover:shadow-md transition-all font-rounded flex-shrink-0"
           >
             <Home size={18} />
@@ -357,7 +356,10 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
           </button>
 
           <button 
-            onClick={handleUndo}
+            onClick={() => {
+              playFillSound();
+              handleUndo();
+            }}
             disabled={!canUndo}
             className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all disabled:opacity-30 disabled:cursor-not-allowed font-rounded flex-shrink-0"
           >
@@ -366,7 +368,10 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
           </button>
 
           <button 
-            onClick={handleRedo}
+            onClick={() => {
+              playFillSound();
+              handleRedo();
+            }}
             disabled={!canRedo}
             className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all disabled:opacity-30 disabled:cursor-not-allowed font-rounded flex-shrink-0"
           >
@@ -377,7 +382,10 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
         
         <div className="flex gap-3 items-center flex-shrink-0">
           <button 
-            onClick={initCanvas}
+            onClick={() => {
+              playFillSound();
+              initCanvas();
+            }}
             className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all font-rounded flex-shrink-0"
           >
             <Eraser size={18} />
@@ -385,7 +393,10 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
           </button>
 
           <button 
-            onClick={handleDownload}
+            onClick={() => {
+              playFillSound();
+              handleDownload();
+            }}
             className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all flex-shrink-0"
           >
             <Download size={18} />
@@ -393,7 +404,10 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
           </button>
 
           <button 
-            onClick={handlePrint}
+            onClick={() => {
+              playFillSound();
+              handlePrint();
+            }}
             className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all flex-shrink-0"
           >
             <Printer size={18} />
@@ -429,7 +443,10 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
           {PALETTE_COLORS.map((color, index) => (
             <button
               key={color}
-              onClick={() => handleColorChange(color)}
+              onClick={() => {
+                playFillSound();
+                handleColorChange(color);
+              }}
               className={`
                 flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full transition-all border-2 shadow-sm hover:shadow-md color-button grid-item
                 ${selectedColor === color 
