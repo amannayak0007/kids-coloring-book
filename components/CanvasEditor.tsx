@@ -65,7 +65,6 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
   // Undo function
   const handleUndo = useCallback(() => {
     if (historyIndexRef.current > 0) {
-      playButtonSound();
       historyIndexRef.current--;
       const canvas = canvasRef.current;
       if (!canvas) return;
@@ -79,12 +78,11 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
       setCanUndo(historyIndexRef.current > 0);
       setCanRedo(historyIndexRef.current < historyRef.current.length - 1);
     }
-  }, [playButtonSound]);
+  }, []);
 
   // Redo function
   const handleRedo = useCallback(() => {
     if (historyIndexRef.current < historyRef.current.length - 1) {
-      playButtonSound();
       historyIndexRef.current++;
       const canvas = canvasRef.current;
       if (!canvas) return;
@@ -98,7 +96,7 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
       setCanUndo(historyIndexRef.current > 0);
       setCanRedo(historyIndexRef.current < historyRef.current.length - 1);
     }
-  }, [playButtonSound]);
+  }, []);
 
   const initCanvas = useCallback(() => {
     const canvas = canvasRef.current;
@@ -165,8 +163,8 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
     };
   }, []);
 
-  // Play sound effect for button clicks
-  const playButtonSound = useCallback(() => {
+  // Play sound effect
+  const playFillSound = useCallback(() => {
     if (audioRef.current) {
       audioRef.current.currentTime = 0; // Reset to start
       audioRef.current.play().catch(() => {
@@ -204,6 +202,8 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
 
     // Perform the fill first
     floodFill(ctx, coords.x, coords.y, selectedColor);
+    // Play sound effect
+    playFillSound();
     // Then save the new state AFTER the change
     saveToHistory();
   };
@@ -224,12 +224,13 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
 
     // Perform the fill first
     floodFill(ctx, coords.x, coords.y, selectedColor);
+    // Play sound effect
+    playFillSound();
     // Then save the new state AFTER the change
     saveToHistory();
   };
 
   const handleDownload = () => {
-    playButtonSound();
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -244,12 +245,10 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
 
 
   const handleColorChange = (color: string) => {
-    playButtonSound();
     setSelectedColor(color);
   };
 
   const handlePrint = () => {
-    playButtonSound();
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -350,10 +349,7 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
       <div className="bg-white/80 backdrop-blur-xl border-b border-gray-200/50 top-bar-safe px-4 sm:px-5 flex items-center justify-between z-10 gap-3 shadow-sm animate-slide-in-left overflow-x-auto">
         <div className="flex gap-3 items-center flex-shrink-0">
           <button 
-            onClick={() => {
-              playButtonSound();
-              onBack();
-            }}
+            onClick={onBack}
             className="bg-gray-900 hover:bg-gray-800 text-white px-5 py-2.5 rounded-full font-medium flex items-center gap-2 shadow-sm hover:shadow-md transition-all font-rounded flex-shrink-0"
           >
             <Home size={18} />
@@ -381,10 +377,7 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
         
         <div className="flex gap-3 items-center flex-shrink-0">
           <button 
-            onClick={() => {
-              playButtonSound();
-              initCanvas();
-            }}
+            onClick={initCanvas}
             className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all font-rounded flex-shrink-0"
           >
             <Eraser size={18} />
