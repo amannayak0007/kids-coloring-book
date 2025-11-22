@@ -285,11 +285,11 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
         }
       `}</style>
       {/* Modern Top Control Bar */}
-      <div className="bg-white/80 backdrop-blur-xl border-b border-gray-200/50 p-4 sm:p-5 flex items-center justify-between z-10 flex-wrap gap-3 shadow-sm animate-slide-in-left">
-        <div className="flex gap-3">
+      <div className="bg-white/80 backdrop-blur-xl border-b border-gray-200/50 p-4 sm:p-5 flex items-center justify-between z-10 gap-3 shadow-sm animate-slide-in-left overflow-x-auto">
+        <div className="flex gap-3 items-center flex-shrink-0">
           <button 
             onClick={onBack}
-            className="bg-gray-900 hover:bg-gray-800 text-white px-5 py-2.5 rounded-full font-medium flex items-center gap-2 shadow-sm hover:shadow-md transition-all font-rounded"
+            className="bg-gray-900 hover:bg-gray-800 text-white px-5 py-2.5 rounded-full font-medium flex items-center gap-2 shadow-sm hover:shadow-md transition-all font-rounded flex-shrink-0"
           >
             <Home size={18} />
             <span className="text-sm sm:text-base hidden sm:inline">Home</span>
@@ -298,7 +298,7 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
           <button 
             onClick={handleUndo}
             disabled={!canUndo}
-            className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all disabled:opacity-30 disabled:cursor-not-allowed font-rounded"
+            className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all disabled:opacity-30 disabled:cursor-not-allowed font-rounded flex-shrink-0"
           >
             <Undo size={18} />
             <span className="text-sm sm:text-base hidden sm:inline">Undo</span>
@@ -307,17 +307,17 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
           <button 
             onClick={handleRedo}
             disabled={!canRedo}
-            className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all disabled:opacity-30 disabled:cursor-not-allowed font-rounded"
+            className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all disabled:opacity-30 disabled:cursor-not-allowed font-rounded flex-shrink-0"
           >
             <Redo size={18} />
             <span className="text-sm sm:text-base hidden sm:inline">Redo</span>
           </button>
         </div>
         
-        <div className="flex gap-3 flex-wrap">
+        <div className="flex gap-3 items-center flex-shrink-0">
           <button 
             onClick={initCanvas}
-            className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all font-rounded"
+            className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all font-rounded flex-shrink-0"
           >
             <Eraser size={18} />
             <span className="text-sm sm:text-base hidden sm:inline">Clear</span>
@@ -325,7 +325,7 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
 
           <button 
             onClick={handleDownload}
-            className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all"
+            className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all flex-shrink-0"
           >
             <Download size={18} />
             <span className="text-sm sm:text-base hidden sm:inline">Save</span>
@@ -333,7 +333,7 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
 
           <button 
             onClick={handlePrint}
-            className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all"
+            className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all flex-shrink-0"
           >
             <Printer size={18} />
             <span className="text-sm sm:text-base hidden sm:inline">Print</span>
