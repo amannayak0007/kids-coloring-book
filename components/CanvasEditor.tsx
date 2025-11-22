@@ -271,7 +271,7 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
 
 
   return (
-    <div className="flex flex-col h-screen max-h-screen overflow-hidden bg-gray-50">
+    <div className="flex flex-col h-screen max-h-screen overflow-hidden bg-gray-50 safe-area-container">
       <style>{`
         .canvas-container {
           width: min(80vw, 80vh);
@@ -283,9 +283,33 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
             height: min(75vw, 75vh);
           }
         }
+        .safe-area-container {
+          padding-top: env(safe-area-inset-top);
+          padding-bottom: env(safe-area-inset-bottom);
+        }
+        .top-bar-safe {
+          padding-top: calc(1rem + env(safe-area-inset-top));
+          padding-bottom: 0.75rem;
+        }
+        @media (min-width: 640px) {
+          .top-bar-safe {
+            padding-top: 1.25rem;
+            padding-bottom: 1.25rem;
+          }
+        }
+        .color-bar-safe {
+          padding-top: 1rem;
+          padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+        }
+        @media (min-width: 640px) {
+          .color-bar-safe {
+            padding-top: 1.25rem;
+            padding-bottom: 1.25rem;
+          }
+        }
       `}</style>
       {/* Modern Top Control Bar */}
-      <div className="bg-white/80 backdrop-blur-xl border-b border-gray-200/50 p-4 sm:p-5 flex items-center justify-between z-10 gap-3 shadow-sm animate-slide-in-left overflow-x-auto">
+      <div className="bg-white/80 backdrop-blur-xl border-b border-gray-200/50 top-bar-safe px-4 sm:px-5 flex items-center justify-between z-10 gap-3 shadow-sm animate-slide-in-left overflow-x-auto">
         <div className="flex gap-3 items-center flex-shrink-0">
           <button 
             onClick={onBack}
@@ -342,7 +366,7 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
       </div>
 
       {/* Modern Main Canvas Area */}
-      <div className="flex-1 relative flex items-center justify-center px-4 sm:px-6 py-8 sm:py-12 overflow-auto" ref={containerRef}>
+      <div className="flex-1 relative flex items-center justify-center px-4 sm:px-6 py-4 sm:py-8 md:py-12 overflow-auto" ref={containerRef}>
         <div 
           className="canvas-container relative bg-white rounded-3xl overflow-hidden border border-gray-200/50 shadow-2xl animate-scale-in"
           style={{
@@ -363,8 +387,8 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
       </div>
 
       {/* Modern Palette Footer */}
-      <div className="bg-white/80 backdrop-blur-xl border-t border-gray-200/50 p-3 sm:p-4 z-20 shadow-sm animate-slide-in-right">
-        <div className="flex overflow-x-auto py-1 gap-2 sm:gap-3 max-w-5xl mx-auto px-3 sm:px-4 scrollbar-hide items-center">
+      <div className="bg-white/80 backdrop-blur-xl border-t border-gray-200/50 color-bar-safe px-3 sm:px-4 z-20 shadow-sm animate-slide-in-right">
+        <div className="flex overflow-x-auto py-2 gap-2 sm:gap-3 max-w-5xl mx-auto px-3 sm:px-4 scrollbar-hide items-center">
           {PALETTE_COLORS.map((color, index) => (
             <button
               key={color}
