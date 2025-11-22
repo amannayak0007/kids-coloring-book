@@ -15,6 +15,7 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
   const [selectedColor, setSelectedColor] = useState<string>(PALETTE_COLORS[2]); 
   const [isReady, setIsReady] = useState(false);
   const [zoom, setZoom] = useState<number>(1);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   
   // Undo/Redo state
   const historyRef = useRef<ImageData[]>([]);
@@ -148,6 +149,30 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
     initCanvas();
   }, [initCanvas]);
 
+  // Initialize audio
+  useEffect(() => {
+    audioRef.current = new Audio('/bubble.wav');
+    audioRef.current.preload = 'auto';
+    audioRef.current.volume = 0.5;
+    
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
+  // Play sound effect
+  const playFillSound = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0; // Reset to start
+      audioRef.current.play().catch(() => {
+        // Ignore errors (e.g., if user hasn't interacted with page yet)
+      });
+    }
+  }, []);
+
 
   // Get canvas coordinates from mouse/touch event
   const getCanvasCoordinates = (clientX: number, clientY: number) => {
@@ -177,6 +202,8 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
 
     // Perform the fill first
     floodFill(ctx, coords.x, coords.y, selectedColor);
+    // Play sound effect
+    playFillSound();
     // Then save the new state AFTER the change
     saveToHistory();
   };
@@ -197,6 +224,8 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
 
     // Perform the fill first
     floodFill(ctx, coords.x, coords.y, selectedColor);
+    // Play sound effect
+    playFillSound();
     // Then save the new state AFTER the change
     saveToHistory();
   };
