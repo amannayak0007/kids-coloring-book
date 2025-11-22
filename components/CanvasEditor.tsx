@@ -273,16 +273,6 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
   return (
     <div className="flex flex-col h-screen max-h-screen overflow-hidden bg-gray-50 safe-area-container">
       <style>{`
-        .canvas-container {
-          width: min(80vw, 80vh);
-          height: min(80vw, 80vh);
-        }
-        @media (min-width: 640px) {
-          .canvas-container {
-            width: min(75vw, 75vh);
-            height: min(75vw, 75vh);
-          }
-        }
         .safe-area-container {
           padding-top: env(safe-area-inset-top);
           padding-bottom: env(safe-area-inset-bottom);
@@ -305,6 +295,24 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
           .color-bar-safe {
             padding-top: 1.25rem;
             padding-bottom: 1.25rem;
+          }
+        }
+        .canvas-container {
+          width: min(85vw, calc(100vh - 200px));
+          height: min(85vw, calc(100vh - 200px));
+          max-width: 100%;
+          max-height: 100%;
+        }
+        @media (min-width: 640px) {
+          .canvas-container {
+            width: min(75vw, calc(100vh - 250px));
+            height: min(75vw, calc(100vh - 250px));
+          }
+        }
+        @media (min-width: 1024px) {
+          .canvas-container {
+            width: min(70vw, 70vh);
+            height: min(70vw, 70vh);
           }
         }
       `}</style>
@@ -366,15 +374,15 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
       </div>
 
       {/* Modern Main Canvas Area */}
-      <div className="flex-1 relative flex items-center justify-center px-4 sm:px-6 py-4 sm:py-8 md:py-12 overflow-auto" ref={containerRef}>
+      <div className="flex-1 relative flex items-center justify-center px-2 sm:px-4 md:px-6 py-2 sm:py-4 md:py-8 overflow-hidden min-h-0" ref={containerRef}>
         <div 
-          className="canvas-container relative bg-white rounded-3xl overflow-hidden border border-gray-200/50 shadow-2xl animate-scale-in"
+          className="canvas-container relative bg-white rounded-2xl sm:rounded-3xl overflow-hidden border border-gray-200/50 shadow-2xl animate-scale-in"
           style={{
             transform: `scale(${zoom})`,
             transformOrigin: 'center',
             transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            maxWidth: '700px',
-            maxHeight: '700px'
+            maxWidth: '100%',
+            maxHeight: '100%'
           }}
         >
           <canvas 
