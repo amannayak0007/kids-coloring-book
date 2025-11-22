@@ -18,9 +18,14 @@ export const Header: React.FC = () => {
               e.preventDefault();
               window.location.hash = '';
             }}
-            className="text-2xl font-bold text-gray-900 hover:text-purple-600 transition-colors font-rounded"
+            className="flex items-center gap-2 text-2xl font-bold text-gray-900 hover:text-purple-600 transition-colors font-rounded"
           >
-Colouring Books For Kids
+            <img 
+              src="/icon.png" 
+              alt="Colouring Books For Kids" 
+              className="w-8 h-8 object-contain"
+            />
+            Colouring Books For Kids
           </a>
           
           <nav className="hidden md:flex items-center space-x-6">
