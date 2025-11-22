@@ -20,7 +20,7 @@ export const Header: React.FC = () => {
             }}
             className="text-2xl font-bold text-gray-900 hover:text-purple-600 transition-colors font-rounded"
           >
-Colouring Pages For Kids
+Colouring Books For Kids
           </a>
           
           <nav className="hidden md:flex items-center space-x-6">
