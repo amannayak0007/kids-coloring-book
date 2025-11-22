@@ -82,7 +82,7 @@ export const CATEGORIES: Category[] = [
     title: 'Coloring Animals',
     colorTheme: 'text-orange-600',
     bgTheme: 'bg-orange-50',
-    items: Array.from({ length: 21 }, (_, i) => ({
+    items: Array.from({ length: 24 }, (_, i) => ({
       id: `a_big_${i + 1}`,
       title: `Animal ${i + 1}`,
       imageSrc: `/Animals/A_big_${i + 1}.png`,
@@ -142,7 +142,7 @@ export const CATEGORIES: Category[] = [
     title: 'Coloring People',
     colorTheme: 'text-yellow-600',
     bgTheme: 'bg-yellow-50',
-    items: Array.from({ length: 9 }, (_, i) => ({
+    items: Array.from({ length: 23 }, (_, i) => ({
       id: `p_big_${i + 1}`,
       title: `People ${i + 1}`,
       imageSrc: `/People/P_big_${i + 1}.png`,
