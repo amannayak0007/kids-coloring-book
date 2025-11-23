@@ -9,7 +9,7 @@ interface CanvasEditorProps {
   onBack: () => void;
 }
 
-type ToolType = 'fill' | 'brush' | 'pen' | 'paintbrush' | 'spray';
+type ToolType = 'fill' | 'brush' | 'pen' | 'paintbrush' | 'spray' | 'eraser';
 
 export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -265,6 +265,18 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
       return;
     }
 
+    // Eraser tool - uses destination-out composite to erase
+    if (selectedTool === 'eraser') {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.globalAlpha = 1.0;
+      ctx.lineWidth = brushSize;
+      ctx.shadowBlur = 0;
+      // Eraser doesn't need color, but we'll continue to drawing logic
+    } else {
+      // Reset composite operation for drawing tools
+      ctx.globalCompositeOperation = 'source-over';
+    }
+
     // Set tool-specific properties with distinct differences
     if (selectedTool === 'pen') {
       // Pen: Thin, solid, precise lines
@@ -312,9 +324,10 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
       ctx.fill();
     }
     
-    // Reset shadow and alpha
+    // Reset shadow, alpha, and composite operation
     ctx.shadowBlur = 0;
     ctx.globalAlpha = 1.0;
+    ctx.globalCompositeOperation = 'source-over';
   }, [selectedTool, selectedColor, brushSize]);
 
   const handleCanvasMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -673,10 +686,29 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
         </div>
       </div>
 
-      {/* Tool Selection Bar - Only show for empty canvas */}
-      {isEmptyCanvas && (
+      {/* Tool Selection Bar - Show for all canvases */}
+      {(
         <div className="bg-white/80 backdrop-blur-xl border-b border-gray-200/50 px-4 sm:px-5 py-3 z-10 shadow-sm">
           <div className="flex items-center justify-center gap-3 sm:gap-4 flex-wrap">
+            {/* Fill Tool - Only for coloring pages */}
+            {!isEmptyCanvas && (
+              <button
+                onClick={() => {
+                  playFillSound();
+                  setSelectedTool('fill');
+                }}
+                className={`px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all flex-shrink-0 ${
+                  selectedTool === 'fill'
+                    ? 'bg-purple-600 text-white shadow-md'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+                title="Fill Tool"
+              >
+                <Droplet size={20} />
+                <span className="text-sm sm:text-base">Fill</span>
+              </button>
+            )}
+
             {/* Brush Tool */}
             <button
               onClick={() => {
@@ -745,6 +777,23 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
               <span className="text-sm sm:text-base">Spray</span>
             </button>
 
+            {/* Eraser Tool */}
+            <button
+              onClick={() => {
+                playFillSound();
+                setSelectedTool('eraser');
+              }}
+              className={`px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all flex-shrink-0 ${
+                selectedTool === 'eraser'
+                  ? 'bg-red-600 text-white shadow-md'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+              title="Eraser Tool"
+            >
+              <Eraser size={20} />
+              <span className="text-sm sm:text-base">Eraser</span>
+            </button>
+
             {/* Brush Size Control */}
             <div className="flex items-center gap-3 px-4 py-2 bg-gray-100 rounded-full">
               <span className="text-sm font-medium text-gray-700 hidden sm:inline">Size:</span>
@@ -783,7 +832,8 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
               selectedTool === 'fill' ? 'cursor-crosshair' : 
               selectedTool === 'brush' ? 'cursor-cell' :
               selectedTool === 'pen' ? 'cursor-text' : 
-              selectedTool === 'spray' ? 'cursor-crosshair' : 'cursor-grab'
+              selectedTool === 'spray' ? 'cursor-crosshair' :
+              selectedTool === 'eraser' ? 'cursor-cell' : 'cursor-grab'
             }`}
             onClick={handleCanvasClick}
             onMouseDown={handleCanvasMouseDown}
