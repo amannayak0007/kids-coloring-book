@@ -557,81 +557,62 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
         </div>
       </div>
 
-      {/* Tool Selection Bar - Always visible for easy tool switching */}
-      <div className="bg-white/80 backdrop-blur-xl border-b border-gray-200/50 px-4 sm:px-5 py-3 z-10 shadow-sm">
-        <div className="flex items-center justify-center gap-3 sm:gap-4 flex-wrap">
-          {/* Fill Tool - Only show for coloring pages */}
-          {!isEmptyCanvas && (
+      {/* Tool Selection Bar - Only show for empty canvas */}
+      {isEmptyCanvas && (
+        <div className="bg-white/80 backdrop-blur-xl border-b border-gray-200/50 px-4 sm:px-5 py-3 z-10 shadow-sm">
+          <div className="flex items-center justify-center gap-3 sm:gap-4 flex-wrap">
+            {/* Brush Tool */}
             <button
               onClick={() => {
                 playFillSound();
-                setSelectedTool('fill');
+                setSelectedTool('brush');
               }}
               className={`px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all flex-shrink-0 ${
-                selectedTool === 'fill'
+                selectedTool === 'brush'
                   ? 'bg-purple-600 text-white shadow-md'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
-              title="Fill Tool"
+              title="Brush Tool"
             >
-              <div className="w-5 h-5 rounded-sm" style={{ backgroundColor: selectedColor, border: '2px solid currentColor' }} />
-              <span className="text-sm sm:text-base">Fill</span>
+              <Brush size={20} />
+              <span className="text-sm sm:text-base">Brush</span>
             </button>
-          )}
-          
-          {/* Brush Tool */}
-          <button
-            onClick={() => {
-              playFillSound();
-              setSelectedTool('brush');
-            }}
-            className={`px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all flex-shrink-0 ${
-              selectedTool === 'brush'
-                ? 'bg-purple-600 text-white shadow-md'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-            title="Brush Tool"
-          >
-            <Brush size={20} />
-            <span className="text-sm sm:text-base">Brush</span>
-          </button>
 
-          {/* Pen Tool */}
-          <button
-            onClick={() => {
-              playFillSound();
-              setSelectedTool('pen');
-            }}
-            className={`px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all flex-shrink-0 ${
-              selectedTool === 'pen'
-                ? 'bg-purple-600 text-white shadow-md'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-            title="Pen Tool"
-          >
-            <Pen size={20} />
-            <span className="text-sm sm:text-base">Pen</span>
-          </button>
+            {/* Pen Tool */}
+            <button
+              onClick={() => {
+                playFillSound();
+                setSelectedTool('pen');
+              }}
+              className={`px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all flex-shrink-0 ${
+                selectedTool === 'pen'
+                  ? 'bg-purple-600 text-white shadow-md'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+              title="Pen Tool"
+            >
+              <Pen size={20} />
+              <span className="text-sm sm:text-base">Pen</span>
+            </button>
 
-          {/* Paintbrush Tool */}
-          <button
-            onClick={() => {
-              playFillSound();
-              setSelectedTool('paintbrush');
-            }}
-            className={`px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all flex-shrink-0 ${
-              selectedTool === 'paintbrush'
-                ? 'bg-purple-600 text-white shadow-md'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-            title="Paintbrush Tool"
-          >
-            <Paintbrush size={20} />
-            <span className="text-sm sm:text-base">Paintbrush</span>
-          </button>
+            {/* Paintbrush Tool */}
+            <button
+              onClick={() => {
+                playFillSound();
+                setSelectedTool('paintbrush');
+              }}
+              className={`px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all flex-shrink-0 ${
+                selectedTool === 'paintbrush'
+                  ? 'bg-purple-600 text-white shadow-md'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+              title="Paintbrush Tool"
+            >
+              <Paintbrush size={20} />
+              <span className="text-sm sm:text-base">Paintbrush</span>
+            </button>
 
-          {/* Brush Size Control - Only show for drawing tools */}
-          {selectedTool !== 'fill' && (
+            {/* Brush Size Control */}
             <div className="flex items-center gap-3 px-4 py-2 bg-gray-100 rounded-full">
               <span className="text-sm font-medium text-gray-700 hidden sm:inline">Size:</span>
               <input
@@ -647,9 +628,9 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
               />
               <span className="text-sm font-medium text-gray-700 w-8 text-center">{brushSize}</span>
             </div>
-          )}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Modern Main Canvas Area */}
       <div className="flex-1 relative flex items-center justify-center px-2 sm:px-4 md:px-6 py-2 sm:py-4 md:py-8 overflow-hidden min-h-0" ref={containerRef}>
