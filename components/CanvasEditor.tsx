@@ -2,14 +2,14 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { ColoringPage } from '../types';
 import { PALETTE_COLORS } from '../constants';
 import { floodFill } from '../utils/floodFill';
-import { Home, Eraser, Download, Undo, Redo, Printer, Paintbrush, Pen, Brush } from 'lucide-react';
+import { Home, Eraser, Download, Undo, Redo, Printer, Paintbrush, Pen, Brush, Droplet } from 'lucide-react';
 
 interface CanvasEditorProps {
   page: ColoringPage;
   onBack: () => void;
 }
 
-type ToolType = 'fill' | 'brush' | 'pen' | 'paintbrush';
+type ToolType = 'fill' | 'brush' | 'pen' | 'paintbrush' | 'spray';
 
 export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -214,6 +214,32 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
     return { x, y };
   };
 
+  // Spray tool drawing function - creates random scatter of dots
+  const drawSpray = useCallback((ctx: CanvasRenderingContext2D, x: number, y: number) => {
+    const sprayRadius = brushSize * 1.5;
+    const density = Math.max(10, Math.floor(brushSize / 2)); // Number of dots per spray
+    
+    ctx.fillStyle = selectedColor;
+    ctx.globalAlpha = 0.7;
+    
+    for (let i = 0; i < density; i++) {
+      // Random angle and distance within spray radius
+      const angle = Math.random() * Math.PI * 2;
+      const distance = Math.random() * sprayRadius;
+      const dotX = x + Math.cos(angle) * distance;
+      const dotY = y + Math.sin(angle) * distance;
+      
+      // Random dot size (smaller dots for more realistic spray effect)
+      const dotSize = Math.random() * 3 + 1;
+      
+      ctx.beginPath();
+      ctx.arc(dotX, dotY, dotSize, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    ctx.globalAlpha = 1.0;
+  }, [selectedColor, brushSize]);
+
   // Drawing function for different tools with smooth curves
   const draw = useCallback((ctx: CanvasRenderingContext2D, x: number, y: number, lastX: number | null, lastY: number | null, midX?: number, midY?: number) => {
     ctx.strokeStyle = selectedColor;
@@ -246,6 +272,11 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
       ctx.lineWidth = brushSize * 2;
       ctx.shadowBlur = 8;
       ctx.shadowColor = selectedColor;
+    } else if (selectedTool === 'spray') {
+      // Spray: Random scatter of dots
+      ctx.globalAlpha = 0.7;
+      ctx.fillStyle = selectedColor;
+      return; // Spray is handled separately
     }
 
     // Draw smooth continuous lines using quadratic curves
@@ -312,26 +343,32 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
     if (!ctx) return;
 
-    const lastPoint = lastPointRef.current;
-    const previousPoint = previousPointRef.current;
-    
-    if (lastPoint) {
-      // Use midpoint for smooth quadratic curves
-      let midX = lastPoint.x;
-      let midY = lastPoint.y;
-      
-      if (previousPoint) {
-        // Calculate midpoint between previous and last point for smoother curves
-        midX = (previousPoint.x + lastPoint.x) / 2;
-        midY = (previousPoint.y + lastPoint.y) / 2;
-      }
-      
-      // Draw smooth curve from last point through midpoint to current point
-      draw(ctx, coords.x, coords.y, lastPoint.x, lastPoint.y, midX, midY);
-      
-      // Update points for next iteration
-      previousPointRef.current = { x: lastPoint.x, y: lastPoint.y };
+    if (selectedTool === 'spray') {
+      // Spray tool - draw spray effect at current position
+      drawSpray(ctx, coords.x, coords.y);
       lastPointRef.current = { x: coords.x, y: coords.y };
+    } else {
+      const lastPoint = lastPointRef.current;
+      const previousPoint = previousPointRef.current;
+      
+      if (lastPoint) {
+        // Use midpoint for smooth quadratic curves
+        let midX = lastPoint.x;
+        let midY = lastPoint.y;
+        
+        if (previousPoint) {
+          // Calculate midpoint between previous and last point for smoother curves
+          midX = (previousPoint.x + lastPoint.x) / 2;
+          midY = (previousPoint.y + lastPoint.y) / 2;
+        }
+        
+        // Draw smooth curve from last point through midpoint to current point
+        draw(ctx, coords.x, coords.y, lastPoint.x, lastPoint.y, midX, midY);
+        
+        // Update points for next iteration
+        previousPointRef.current = { x: lastPoint.x, y: lastPoint.y };
+        lastPointRef.current = { x: coords.x, y: coords.y };
+      }
     }
   };
 
@@ -375,8 +412,11 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
       setIsDrawing(false);
       lastPointRef.current = null;
       previousPointRef.current = null;
+    } else if (selectedTool === 'spray') {
+      // Spray tool - draw spray effect
+      drawSpray(ctx, coords.x, coords.y);
     } else {
-      // Draw initial point for drawing tools
+      // Draw initial point for other drawing tools
       draw(ctx, coords.x, coords.y, null, null);
     }
   };
@@ -393,26 +433,32 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
     if (!ctx) return;
 
-    const lastPoint = lastPointRef.current;
-    const previousPoint = previousPointRef.current;
-    
-    if (lastPoint) {
-      // Use midpoint for smooth quadratic curves
-      let midX = lastPoint.x;
-      let midY = lastPoint.y;
-      
-      if (previousPoint) {
-        // Calculate midpoint between previous and last point for smoother curves
-        midX = (previousPoint.x + lastPoint.x) / 2;
-        midY = (previousPoint.y + lastPoint.y) / 2;
-      }
-      
-      // Draw smooth curve from last point through midpoint to current point
-      draw(ctx, coords.x, coords.y, lastPoint.x, lastPoint.y, midX, midY);
-      
-      // Update points for next iteration
-      previousPointRef.current = { x: lastPoint.x, y: lastPoint.y };
+    if (selectedTool === 'spray') {
+      // Spray tool - draw spray effect at current position
+      drawSpray(ctx, coords.x, coords.y);
       lastPointRef.current = { x: coords.x, y: coords.y };
+    } else {
+      const lastPoint = lastPointRef.current;
+      const previousPoint = previousPointRef.current;
+      
+      if (lastPoint) {
+        // Use midpoint for smooth quadratic curves
+        let midX = lastPoint.x;
+        let midY = lastPoint.y;
+        
+        if (previousPoint) {
+          // Calculate midpoint between previous and last point for smoother curves
+          midX = (previousPoint.x + lastPoint.x) / 2;
+          midY = (previousPoint.y + lastPoint.y) / 2;
+        }
+        
+        // Draw smooth curve from last point through midpoint to current point
+        draw(ctx, coords.x, coords.y, lastPoint.x, lastPoint.y, midX, midY);
+        
+        // Update points for next iteration
+        previousPointRef.current = { x: lastPoint.x, y: lastPoint.y };
+        lastPointRef.current = { x: coords.x, y: coords.y };
+      }
     }
   };
 
@@ -671,6 +717,23 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
               <span className="text-sm sm:text-base">Paintbrush</span>
             </button>
 
+            {/* Spray Tool */}
+            <button
+              onClick={() => {
+                playFillSound();
+                setSelectedTool('spray');
+              }}
+              className={`px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all flex-shrink-0 ${
+                selectedTool === 'spray'
+                  ? 'bg-purple-600 text-white shadow-md'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+              title="Spray Tool"
+            >
+              <Droplet size={20} />
+              <span className="text-sm sm:text-base">Spray</span>
+            </button>
+
             {/* Brush Size Control */}
             <div className="flex items-center gap-3 px-4 py-2 bg-gray-100 rounded-full">
               <span className="text-sm font-medium text-gray-700 hidden sm:inline">Size:</span>
@@ -708,7 +771,8 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
             className={`w-full h-full object-contain ${
               selectedTool === 'fill' ? 'cursor-crosshair' : 
               selectedTool === 'brush' ? 'cursor-cell' :
-              selectedTool === 'pen' ? 'cursor-text' : 'cursor-grab'
+              selectedTool === 'pen' ? 'cursor-text' : 
+              selectedTool === 'spray' ? 'cursor-crosshair' : 'cursor-grab'
             }`}
             onClick={handleCanvasClick}
             onMouseDown={handleCanvasMouseDown}
