@@ -87,7 +87,7 @@ export const Gallery: React.FC<GalleryProps> = ({ onSelectPage }) => {
           
           {category.items.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
-              {/* Empty Canvas - Draw & Create Card (First Position) */}
+              {/* Empty Canvas - Draw & Create Card (First Position) - Hidden on mobile/compact devices */}
               <div 
                 onClick={() => onSelectPage({
                   id: 'empty-canvas',
@@ -95,7 +95,7 @@ export const Gallery: React.FC<GalleryProps> = ({ onSelectPage }) => {
                   imageSrc: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgZmlsbD0iI0ZGRiIvPjwvc3ZnPg==',
                   thumbnailSrc: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgZmlsbD0iI0ZGRiIvPjwvc3ZnPg=='
                 })}
-                className="group cursor-pointer bg-gradient-to-br from-purple-100 to-pink-100 rounded-3xl shadow-sm hover:shadow-xl transition-all border-2 border-purple-200 hover:border-purple-300 overflow-hidden card-hover grid-item"
+                className="hidden md:block group cursor-pointer bg-gradient-to-br from-purple-100 to-pink-100 rounded-3xl shadow-sm hover:shadow-xl transition-all border-2 border-purple-200 hover:border-purple-300 overflow-hidden card-hover grid-item"
                 style={{ animationDelay: `${categoryIndex * 0.1}s` }}
               >
                 <div className="aspect-square p-4 sm:p-5 flex flex-col items-center justify-center">
