@@ -174,28 +174,6 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
     initCanvas();
   }, [initCanvas]);
 
-  // Prevent body scrolling when drawing on mobile
-  useEffect(() => {
-    if (isDrawing) {
-      // Prevent scrolling on body
-      document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-    } else {
-      // Restore scrolling
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-    }
-    
-    return () => {
-      // Cleanup on unmount
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-    };
-  }, [isDrawing]);
-
   // Initialize audio
   useEffect(() => {
     audioRef.current = new Audio('/bubble.wav');
@@ -413,14 +391,7 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
   // Touch event handlers for mobile devices
   const handleCanvasTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
     e.preventDefault();
-    e.stopPropagation();
     if (!isReady) return;
-    
-    if (e.touches.length > 1) {
-      // Multi-touch - don't draw, just prevent default
-      return;
-    }
-    
     const touch = e.touches[0];
     const coords = getCanvasCoordinates(touch.clientX, touch.clientY);
     if (!coords) return;
@@ -452,14 +423,7 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
 
   const handleCanvasTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
     e.preventDefault();
-    e.stopPropagation();
     if (!isReady || !isDrawing || selectedTool === 'fill') return;
-    
-    if (e.touches.length > 1) {
-      // Multi-touch - don't draw, just prevent default
-      return;
-    }
-    
     const touch = e.touches[0];
     const coords = getCanvasCoordinates(touch.clientX, touch.clientY);
     if (!coords) return;
@@ -500,7 +464,6 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
 
   const handleCanvasTouchEnd = (e: React.TouchEvent<HTMLCanvasElement>) => {
     e.preventDefault();
-    e.stopPropagation();
     if (isDrawing && selectedTool !== 'fill') {
       saveToHistory();
     }
@@ -792,11 +755,7 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
       )}
 
       {/* Modern Main Canvas Area */}
-      <div 
-        className="flex-1 relative flex items-center justify-center px-2 sm:px-4 md:px-6 py-2 sm:py-4 md:py-8 overflow-hidden min-h-0" 
-        ref={containerRef}
-        style={{ touchAction: 'none' }}
-      >
+      <div className="flex-1 relative flex items-center justify-center px-2 sm:px-4 md:px-6 py-2 sm:py-4 md:py-8 overflow-hidden min-h-0" ref={containerRef}>
         <div 
           className="canvas-container relative bg-white rounded-2xl sm:rounded-3xl overflow-hidden border border-gray-200/50 shadow-2xl animate-scale-in"
           style={{
@@ -804,8 +763,7 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
             transformOrigin: 'center',
             transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
             maxWidth: '100%',
-            maxHeight: '100%',
-            touchAction: 'none'
+            maxHeight: '100%'
           }}
         >
           <canvas 
@@ -816,7 +774,6 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
               selectedTool === 'pen' ? 'cursor-text' : 
               selectedTool === 'spray' ? 'cursor-crosshair' : 'cursor-grab'
             }`}
-            style={{ touchAction: 'none' }}
             onClick={handleCanvasClick}
             onMouseDown={handleCanvasMouseDown}
             onMouseMove={handleCanvasMouseMove}
@@ -825,7 +782,6 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
             onTouchStart={handleCanvasTouchStart}
             onTouchMove={handleCanvasTouchMove}
             onTouchEnd={handleCanvasTouchEnd}
-            onTouchCancel={handleCanvasTouchEnd}
           />
         </div>
       </div>
