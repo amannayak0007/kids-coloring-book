@@ -2,12 +2,14 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { ColoringPage } from '../types';
 import { PALETTE_COLORS } from '../constants';
 import { floodFill } from '../utils/floodFill';
-import { Home, Eraser, Download, Undo, Redo, Printer } from 'lucide-react';
+import { Home, Eraser, Download, Undo, Redo, Printer, Paintbrush, Pen, Brush } from 'lucide-react';
 
 interface CanvasEditorProps {
   page: ColoringPage;
   onBack: () => void;
 }
+
+type ToolType = 'fill' | 'brush' | 'pen' | 'paintbrush';
 
 export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -16,6 +18,13 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
   const [isReady, setIsReady] = useState(false);
   const [zoom, setZoom] = useState<number>(1);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  
+  // Drawing tools state
+  const isEmptyCanvas = page.id === 'empty-canvas';
+  const [selectedTool, setSelectedTool] = useState<ToolType>(isEmptyCanvas ? 'brush' : 'fill');
+  const [brushSize, setBrushSize] = useState<number>(20);
+  const [isDrawing, setIsDrawing] = useState<boolean>(false);
+  const lastPointRef = useRef<{ x: number; y: number } | null>(null);
   
   // Undo/Redo state
   const historyRef = useRef<ImageData[]>([]);
@@ -105,31 +114,19 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
     if (!ctx) return;
 
-    const img = new Image();
-    img.src = page.imageSrc;
-    img.crossOrigin = "Anonymous";
+    // High resolution internal canvas
+    const internalWidth = 1024; 
+    const internalHeight = 1024;
     
-    img.onload = () => {
-      // High resolution internal canvas
-      const internalWidth = 1024; 
-      const internalHeight = 1024;
-      
-      canvas.width = internalWidth;
-      canvas.height = internalHeight;
+    canvas.width = internalWidth;
+    canvas.height = internalHeight;
 
-      // IMPORTANT: Fill background with WHITE first.
-      // This is crucial for transparent PNGs/SVGs to be colorable.
-      ctx.fillStyle = '#FFFFFF';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Fill background with WHITE first
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Calculate scale to fit image
-      const scale = Math.min(canvas.width / img.width, canvas.height / img.height) * 0.85;
-      const x = (canvas.width - img.width * scale) / 2;
-      const y = (canvas.height - img.height * scale) / 2;
-
-      ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
-      
-      // Save initial state to history
+    if (isEmptyCanvas) {
+      // Empty canvas - just white background
       const initialImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const clonedInitialImageData = new ImageData(
         new Uint8ClampedArray(initialImageData.data),
@@ -140,10 +137,37 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
       historyIndexRef.current = 0;
       setCanUndo(false);
       setCanRedo(false);
-      
       setIsReady(true);
-    };
-  }, [page, saveToHistory]);
+    } else {
+      // Load image for coloring pages
+      const img = new Image();
+      img.src = page.imageSrc;
+      img.crossOrigin = "Anonymous";
+      
+      img.onload = () => {
+        // Calculate scale to fit image
+        const scale = Math.min(canvas.width / img.width, canvas.height / img.height) * 0.85;
+        const x = (canvas.width - img.width * scale) / 2;
+        const y = (canvas.height - img.height * scale) / 2;
+
+        ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+        
+        // Save initial state to history
+        const initialImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const clonedInitialImageData = new ImageData(
+          new Uint8ClampedArray(initialImageData.data),
+          initialImageData.width,
+          initialImageData.height
+        );
+        historyRef.current = [clonedInitialImageData];
+        historyIndexRef.current = 0;
+        setCanUndo(false);
+        setCanRedo(false);
+        
+        setIsReady(true);
+      };
+    }
+  }, [page, isEmptyCanvas, saveToHistory]);
 
   useEffect(() => {
     initCanvas();
@@ -189,41 +213,158 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
     return { x, y };
   };
 
-  const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  // Drawing function for different tools
+  const draw = useCallback((ctx: CanvasRenderingContext2D, x: number, y: number, lastX: number | null, lastY: number | null) => {
+    ctx.strokeStyle = selectedColor;
+    ctx.fillStyle = selectedColor;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    if (selectedTool === 'fill') {
+      if (lastX === null || lastY === null) {
+        floodFill(ctx, x, y, selectedColor);
+      }
+      return;
+    }
+
+    // Set tool-specific properties
+    if (selectedTool === 'pen') {
+      ctx.globalAlpha = 1.0;
+      ctx.lineWidth = brushSize * 0.3;
+    } else if (selectedTool === 'brush') {
+      ctx.globalAlpha = 0.8;
+      ctx.lineWidth = brushSize;
+    } else if (selectedTool === 'paintbrush') {
+      ctx.globalAlpha = 0.6;
+      ctx.lineWidth = brushSize * 1.5;
+    }
+
+    if (lastX !== null && lastY !== null) {
+      // Draw line from last point to current point
+      ctx.beginPath();
+      ctx.moveTo(lastX, lastY);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+    } else {
+      // Draw a dot at the current point
+      ctx.beginPath();
+      ctx.arc(x, y, ctx.lineWidth / 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    ctx.globalAlpha = 1.0;
+  }, [selectedTool, selectedColor, brushSize]);
+
+  const handleCanvasMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!isReady) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d', { willReadFrequently: true });
-    if (!ctx) return;
-
     const coords = getCanvasCoordinates(e.clientX, e.clientY);
     if (!coords) return;
 
-    // Perform the fill first
-    floodFill(ctx, coords.x, coords.y, selectedColor);
-    // Then save the new state AFTER the change
-    saveToHistory();
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    if (!ctx) return;
+
+    setIsDrawing(true);
+    lastPointRef.current = { x: coords.x, y: coords.y };
+
+    if (selectedTool === 'fill') {
+      floodFill(ctx, coords.x, coords.y, selectedColor);
+      saveToHistory();
+      setIsDrawing(false);
+      lastPointRef.current = null;
+    } else {
+      // Start drawing
+      draw(ctx, coords.x, coords.y, null, null);
+      saveToHistory();
+    }
+  };
+
+  const handleCanvasMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isReady || !isDrawing || selectedTool === 'fill') return;
+    const coords = getCanvasCoordinates(e.clientX, e.clientY);
+    if (!coords) return;
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    if (!ctx) return;
+
+    const lastPoint = lastPointRef.current;
+    if (lastPoint) {
+      draw(ctx, coords.x, coords.y, lastPoint.x, lastPoint.y);
+      lastPointRef.current = { x: coords.x, y: coords.y };
+    }
+  };
+
+  const handleCanvasMouseUp = () => {
+    if (isDrawing && selectedTool !== 'fill') {
+      saveToHistory();
+    }
+    setIsDrawing(false);
+    lastPointRef.current = null;
+  };
+
+  const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    // Only handle click for fill tool when not drawing
+    if (selectedTool === 'fill' && !isDrawing) {
+      handleCanvasMouseDown(e);
+    }
   };
 
   // Touch event handlers for mobile devices
   const handleCanvasTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
     e.preventDefault();
     if (!isReady) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
     const touch = e.touches[0];
     const coords = getCanvasCoordinates(touch.clientX, touch.clientY);
     if (!coords) return;
 
+    const canvas = canvasRef.current;
+    if (!canvas) return;
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
     if (!ctx) return;
 
-    // Perform the fill first
-    floodFill(ctx, coords.x, coords.y, selectedColor);
-    // Then save the new state AFTER the change
-    saveToHistory();
+    setIsDrawing(true);
+    lastPointRef.current = { x: coords.x, y: coords.y };
+
+    if (selectedTool === 'fill') {
+      floodFill(ctx, coords.x, coords.y, selectedColor);
+      saveToHistory();
+      setIsDrawing(false);
+      lastPointRef.current = null;
+    } else {
+      draw(ctx, coords.x, coords.y, null, null);
+      saveToHistory();
+    }
+  };
+
+  const handleCanvasTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
+    if (!isReady || !isDrawing || selectedTool === 'fill') return;
+    const touch = e.touches[0];
+    const coords = getCanvasCoordinates(touch.clientX, touch.clientY);
+    if (!coords) return;
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    if (!ctx) return;
+
+    const lastPoint = lastPointRef.current;
+    if (lastPoint) {
+      draw(ctx, coords.x, coords.y, lastPoint.x, lastPoint.y);
+      lastPointRef.current = { x: coords.x, y: coords.y };
+    }
+  };
+
+  const handleCanvasTouchEnd = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
+    if (isDrawing && selectedTool !== 'fill') {
+      saveToHistory();
+    }
+    setIsDrawing(false);
+    lastPointRef.current = null;
   };
 
   const handleDownload = () => {
@@ -416,6 +557,100 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
         </div>
       </div>
 
+      {/* Tool Selection Bar - Always visible for easy tool switching */}
+      <div className="bg-white/80 backdrop-blur-xl border-b border-gray-200/50 px-4 sm:px-5 py-3 z-10 shadow-sm">
+        <div className="flex items-center justify-center gap-3 sm:gap-4 flex-wrap">
+          {/* Fill Tool - Only show for coloring pages */}
+          {!isEmptyCanvas && (
+            <button
+              onClick={() => {
+                playFillSound();
+                setSelectedTool('fill');
+              }}
+              className={`px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all flex-shrink-0 ${
+                selectedTool === 'fill'
+                  ? 'bg-purple-600 text-white shadow-md'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+              title="Fill Tool"
+            >
+              <div className="w-5 h-5 rounded-sm" style={{ backgroundColor: selectedColor, border: '2px solid currentColor' }} />
+              <span className="text-sm sm:text-base">Fill</span>
+            </button>
+          )}
+          
+          {/* Brush Tool */}
+          <button
+            onClick={() => {
+              playFillSound();
+              setSelectedTool('brush');
+            }}
+            className={`px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all flex-shrink-0 ${
+              selectedTool === 'brush'
+                ? 'bg-purple-600 text-white shadow-md'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+            title="Brush Tool"
+          >
+            <Brush size={20} />
+            <span className="text-sm sm:text-base">Brush</span>
+          </button>
+
+          {/* Pen Tool */}
+          <button
+            onClick={() => {
+              playFillSound();
+              setSelectedTool('pen');
+            }}
+            className={`px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all flex-shrink-0 ${
+              selectedTool === 'pen'
+                ? 'bg-purple-600 text-white shadow-md'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+            title="Pen Tool"
+          >
+            <Pen size={20} />
+            <span className="text-sm sm:text-base">Pen</span>
+          </button>
+
+          {/* Paintbrush Tool */}
+          <button
+            onClick={() => {
+              playFillSound();
+              setSelectedTool('paintbrush');
+            }}
+            className={`px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all flex-shrink-0 ${
+              selectedTool === 'paintbrush'
+                ? 'bg-purple-600 text-white shadow-md'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+            title="Paintbrush Tool"
+          >
+            <Paintbrush size={20} />
+            <span className="text-sm sm:text-base">Paintbrush</span>
+          </button>
+
+          {/* Brush Size Control - Only show for drawing tools */}
+          {selectedTool !== 'fill' && (
+            <div className="flex items-center gap-3 px-4 py-2 bg-gray-100 rounded-full">
+              <span className="text-sm font-medium text-gray-700 hidden sm:inline">Size:</span>
+              <input
+                type="range"
+                min="5"
+                max="50"
+                value={brushSize}
+                onChange={(e) => setBrushSize(Number(e.target.value))}
+                className="w-20 sm:w-32 h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-purple-600"
+                style={{
+                  background: `linear-gradient(to right, #9333ea 0%, #9333ea ${((brushSize - 5) / 45) * 100}%, #d1d5db ${((brushSize - 5) / 45) * 100}%, #d1d5db 100%)`
+                }}
+              />
+              <span className="text-sm font-medium text-gray-700 w-8 text-center">{brushSize}</span>
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* Modern Main Canvas Area */}
       <div className="flex-1 relative flex items-center justify-center px-2 sm:px-4 md:px-6 py-2 sm:py-4 md:py-8 overflow-hidden min-h-0" ref={containerRef}>
         <div 
@@ -430,9 +665,19 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
         >
           <canvas 
             ref={canvasRef}
-            className="w-full h-full object-contain cursor-crosshair"
+            className={`w-full h-full object-contain ${
+              selectedTool === 'fill' ? 'cursor-crosshair' : 
+              selectedTool === 'brush' ? 'cursor-cell' :
+              selectedTool === 'pen' ? 'cursor-text' : 'cursor-grab'
+            }`}
             onClick={handleCanvasClick}
+            onMouseDown={handleCanvasMouseDown}
+            onMouseMove={handleCanvasMouseMove}
+            onMouseUp={handleCanvasMouseUp}
+            onMouseLeave={handleCanvasMouseUp}
             onTouchStart={handleCanvasTouchStart}
+            onTouchMove={handleCanvasTouchMove}
+            onTouchEnd={handleCanvasTouchEnd}
           />
         </div>
       </div>

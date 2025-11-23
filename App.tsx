@@ -6,6 +6,7 @@ import { PrivacyPolicy } from './components/PrivacyPolicy';
 import { About } from './components/About';
 import { Contact } from './components/Contact';
 import { TermsAndConditions } from './components/TermsAndConditions';
+import { AdSense } from './components/AdSense';
 import { ColoringPage } from './types';
 
 const App: React.FC = () => {
@@ -40,24 +41,83 @@ const App: React.FC = () => {
     );
   }
 
+  // Wrapper component for content pages with ads
+  const ContentPageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+    <>
+      {/* Top Ad Space - Web Only */}
+      <div className="w-full bg-gray-50/50 py-4 flex justify-center items-center">
+        <div className="max-w-7xl w-full px-4">
+          <AdSense 
+            className="mx-auto"
+            style={{ minHeight: '100px', maxWidth: '728px', margin: '0 auto' }}
+          />
+        </div>
+      </div>
+      {children}
+      {/* Bottom Ad Space - Web Only */}
+      <div className="w-full bg-gray-50/50 py-4 flex justify-center items-center">
+        <div className="max-w-7xl w-full px-4">
+          <AdSense 
+            className="mx-auto"
+            style={{ minHeight: '100px', maxWidth: '728px', margin: '0 auto' }}
+          />
+        </div>
+      </div>
+    </>
+  );
+
   // Route to different pages based on hash
   const renderPage = () => {
     switch (currentRoute) {
       case 'privacy':
-        return <PrivacyPolicy />;
+        return (
+          <ContentPageWrapper>
+            <PrivacyPolicy />
+          </ContentPageWrapper>
+        );
       case 'about':
-        return <About />;
+        return (
+          <ContentPageWrapper>
+            <About />
+          </ContentPageWrapper>
+        );
       case 'contact':
-        return <Contact />;
+        return (
+          <ContentPageWrapper>
+            <Contact />
+          </ContentPageWrapper>
+        );
       case 'terms':
-        return <TermsAndConditions />;
+        return (
+          <ContentPageWrapper>
+            <TermsAndConditions />
+          </ContentPageWrapper>
+        );
       default:
         return (
           <>
             <Header />
+            {/* Top Ad Space - Web Only */}
+            <div className="w-full bg-gray-50/50 py-4 flex justify-center items-center">
+              <div className="max-w-7xl w-full px-4">
+                <AdSense 
+                  className="mx-auto"
+                  style={{ minHeight: '100px', maxWidth: '728px', margin: '0 auto' }}
+                />
+              </div>
+            </div>
             <main className="flex-grow">
               <Gallery onSelectPage={setSelectedPage} />
             </main>
+            {/* Bottom Ad Space - Web Only */}
+            <div className="w-full bg-gray-50/50 py-4 flex justify-center items-center">
+              <div className="max-w-7xl w-full px-4">
+                <AdSense 
+                  className="mx-auto"
+                  style={{ minHeight: '100px', maxWidth: '728px', margin: '0 auto' }}
+                />
+              </div>
+            </div>
             {/* Modern Footer */}
             <footer className="bg-white/80 backdrop-blur-xl border-t border-gray-200/50 text-gray-600 py-12 animate-fade-in">
               <div className="max-w-6xl mx-auto px-4">

@@ -47,6 +47,40 @@ export const Gallery: React.FC<GalleryProps> = ({ onSelectPage }) => {
         </div>
       </div>
 
+      {/* Empty Canvas Drawing Option */}
+      {selectedCategory === null && (
+        <div className="mb-12 animate-fade-in">
+          <div className="flex justify-center mb-6">
+            <h2 className="text-3xl sm:text-4xl font-semibold text-gray-900 animate-scale-in tracking-tight">
+              🎨 Draw on Empty Canvas
+            </h2>
+          </div>
+          <div className="flex justify-center">
+            <div 
+              onClick={() => onSelectPage({
+                id: 'empty-canvas',
+                title: 'Empty Canvas - Draw & Create',
+                imageSrc: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgZmlsbD0iI0ZGRiIvPjwvc3ZnPg==',
+                thumbnailSrc: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgZmlsbD0iI0ZGRiIvPjwvc3ZnPg=='
+              })}
+              className="group cursor-pointer bg-gradient-to-br from-purple-100 to-pink-100 rounded-3xl shadow-lg hover:shadow-2xl transition-all border-2 border-purple-200 hover:border-purple-300 overflow-hidden card-hover w-full max-w-md"
+            >
+              <div className="aspect-square p-8 flex flex-col items-center justify-center">
+                <div className="text-6xl sm:text-7xl mb-4 group-hover:scale-110 transition-transform duration-500">
+                  ✏️🎨🖌️
+                </div>
+                <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">
+                  Draw & Create
+                </h3>
+                <p className="text-gray-600 text-center font-medium">
+                  Use brush, pen & paintbrush to draw anything you imagine!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Modern Filter Bar */}
       <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-5 mb-12 shadow-sm border border-gray-200/50 animate-slide-in-left">
         <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
