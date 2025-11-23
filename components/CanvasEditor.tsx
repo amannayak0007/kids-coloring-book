@@ -686,29 +686,10 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
         </div>
       </div>
 
-      {/* Tool Selection Bar - Show for all canvases */}
-      {(
+      {/* Tool Selection Bar - Only show for empty canvas */}
+      {isEmptyCanvas && (
         <div className="bg-white/80 backdrop-blur-xl border-b border-gray-200/50 px-4 sm:px-5 py-3 z-10 shadow-sm">
           <div className="flex items-center justify-center gap-3 sm:gap-4 flex-wrap">
-            {/* Fill Tool - Only for coloring pages */}
-            {!isEmptyCanvas && (
-              <button
-                onClick={() => {
-                  playFillSound();
-                  setSelectedTool('fill');
-                }}
-                className={`px-4 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all flex-shrink-0 ${
-                  selectedTool === 'fill'
-                    ? 'bg-purple-600 text-white shadow-md'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-                title="Fill Tool"
-              >
-                <Droplet size={20} />
-                <span className="text-sm sm:text-base">Fill</span>
-              </button>
-            )}
-
             {/* Brush Tool */}
             <button
               onClick={() => {
