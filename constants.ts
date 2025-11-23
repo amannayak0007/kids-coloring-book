@@ -41,7 +41,6 @@ export const PALETTE_COLORS = [
   '#7B68EE', // MediumSlateBlue
   '#6A5ACD', // SlateBlue
   '#483D8B', // DarkSlateBlue
-  '#2F4F4F', // DarkSlateGray
   '#BC8F8F', // RosyBrown
   '#F4A460', // SandyBrown
   '#DAA520', // Goldenrod
