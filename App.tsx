@@ -97,24 +97,15 @@ const App: React.FC = () => {
         return (
           <>
             <Header />
-            {/* Top Ad Space - Web Only */}
-            <div className="w-full bg-gray-50/50 py-4 flex justify-center items-center">
-              <div className="max-w-7xl w-full px-4">
-                <AdSense 
-                  className="mx-auto"
-                  style={{ minHeight: '100px', maxWidth: '728px', margin: '0 auto' }}
-                />
-              </div>
-            </div>
             <main className="flex-grow">
               <Gallery onSelectPage={setSelectedPage} />
             </main>
             {/* Bottom Ad Space - Web Only */}
-            <div className="w-full bg-gray-50/50 py-4 flex justify-center items-center">
+            <div className="w-full bg-gray-50/50 py-12 flex justify-center items-center">
               <div className="max-w-7xl w-full px-4">
                 <AdSense 
                   className="mx-auto"
-                  style={{ minHeight: '100px', maxWidth: '728px', margin: '0 auto' }}
+                  style={{ minHeight: '150px', maxWidth: '728px', margin: '0 auto' }}
                 />
               </div>
             </div>
