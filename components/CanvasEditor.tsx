@@ -174,27 +174,29 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
     initCanvas();
   }, [initCanvas]);
 
-  // Prevent body scrolling when drawing on mobile
+  // Prevent scrolling only on canvas area, not the whole page
   useEffect(() => {
-    if (isDrawing) {
-      // Prevent scrolling on body
-      document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-    } else {
-      // Restore scrolling
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-    }
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    // Prevent scrolling only when touching the canvas
+    const preventCanvasScroll = (e: TouchEvent) => {
+      const target = e.target as Node;
+      if (canvas.contains(target) || target === canvas) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    // Add touch event listeners only for canvas area
+    canvas.addEventListener('touchmove', preventCanvasScroll, { passive: false });
+    canvas.addEventListener('touchstart', preventCanvasScroll, { passive: false });
     
     return () => {
-      // Cleanup on unmount
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
+      canvas.removeEventListener('touchmove', preventCanvasScroll);
+      canvas.removeEventListener('touchstart', preventCanvasScroll);
     };
-  }, [isDrawing]);
+  }, []);
 
   // Initialize audio
   useEffect(() => {
@@ -579,11 +581,22 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
 
 
   return (
-    <div className="flex flex-col h-screen max-h-screen overflow-hidden bg-gray-50 safe-area-container">
+    <div 
+      className="flex flex-col h-screen max-h-screen overflow-hidden bg-gray-50 safe-area-container"
+      style={{ 
+        touchAction: 'pan-y',
+        overscrollBehavior: 'none'
+      }}
+    >
       <style>{`
         .safe-area-container {
           padding-top: env(safe-area-inset-top);
           padding-bottom: env(safe-area-inset-bottom);
+        }
+        * {
+          -webkit-touch-callout: none;
+          -webkit-user-select: none;
+          user-select: none;
         }
         .top-bar-safe {
           padding-top: calc(1rem + env(safe-area-inset-top));
@@ -795,7 +808,12 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
       <div 
         className="flex-1 relative flex items-center justify-center px-2 sm:px-4 md:px-6 py-2 sm:py-4 md:py-8 overflow-hidden min-h-0" 
         ref={containerRef}
-        style={{ touchAction: 'none' }}
+        style={{ 
+          touchAction: 'pan-y',
+          overscrollBehavior: 'contain',
+          flex: '1 1 auto',
+          minHeight: 0
+        }}
       >
         <div 
           className="canvas-container relative bg-white rounded-2xl sm:rounded-3xl overflow-hidden border border-gray-200/50 shadow-2xl animate-scale-in"
@@ -805,8 +823,12 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
             transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
             maxWidth: '100%',
             maxHeight: '100%',
-            touchAction: 'none'
+            touchAction: 'none',
+            overscrollBehavior: 'none'
           }}
+          onTouchStart={(e) => e.preventDefault()}
+          onTouchMove={(e) => e.preventDefault()}
+          onTouchEnd={(e) => e.preventDefault()}
         >
           <canvas 
             ref={canvasRef}
@@ -816,7 +838,12 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
               selectedTool === 'pen' ? 'cursor-text' : 
               selectedTool === 'spray' ? 'cursor-crosshair' : 'cursor-grab'
             }`}
-            style={{ touchAction: 'none' }}
+            style={{ 
+              touchAction: 'none',
+              overscrollBehavior: 'none',
+              WebkitUserSelect: 'none',
+              userSelect: 'none'
+            }}
             onClick={handleCanvasClick}
             onMouseDown={handleCanvasMouseDown}
             onMouseMove={handleCanvasMouseMove}
@@ -830,8 +857,14 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
         </div>
       </div>
 
-      {/* Modern Palette Footer */}
-      <div className="bg-white/80 backdrop-blur-xl border-t border-gray-200/50 color-bar-safe px-3 sm:px-4 z-20 shadow-sm animate-slide-in-right">
+      {/* Modern Palette Footer - Always visible at bottom */}
+      <div 
+        className="bg-white/80 backdrop-blur-xl border-t border-gray-200/50 color-bar-safe px-3 sm:px-4 z-20 shadow-sm animate-slide-in-right"
+        style={{ 
+          flexShrink: 0,
+          width: '100%'
+        }}
+      >
         <div className="flex overflow-x-auto py-2 gap-2 sm:gap-3 max-w-5xl mx-auto px-3 sm:px-4 scrollbar-hide items-center">
           {PALETTE_COLORS.map((color, index) => (
             <button
