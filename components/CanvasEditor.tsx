@@ -25,6 +25,7 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
   const [brushSize, setBrushSize] = useState<number>(20);
   const [isDrawing, setIsDrawing] = useState<boolean>(false);
   const lastPointRef = useRef<{ x: number; y: number } | null>(null);
+  const previousPointRef = useRef<{ x: number; y: number } | null>(null);
   
   // Undo/Redo state
   const historyRef = useRef<ImageData[]>([]);
@@ -213,8 +214,8 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
     return { x, y };
   };
 
-  // Drawing function for different tools
-  const draw = useCallback((ctx: CanvasRenderingContext2D, x: number, y: number, lastX: number | null, lastY: number | null) => {
+  // Drawing function for different tools with smooth curves
+  const draw = useCallback((ctx: CanvasRenderingContext2D, x: number, y: number, lastX: number | null, lastY: number | null, midX?: number, midY?: number) => {
     ctx.strokeStyle = selectedColor;
     ctx.fillStyle = selectedColor;
     ctx.lineCap = 'round';
@@ -227,31 +228,50 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
       return;
     }
 
-    // Set tool-specific properties
+    // Set tool-specific properties with distinct differences
     if (selectedTool === 'pen') {
+      // Pen: Thin, solid, precise lines
       ctx.globalAlpha = 1.0;
-      ctx.lineWidth = brushSize * 0.3;
+      ctx.lineWidth = Math.max(2, brushSize * 0.2);
+      ctx.shadowBlur = 0;
     } else if (selectedTool === 'brush') {
-      ctx.globalAlpha = 0.8;
+      // Brush: Medium, slightly soft
+      ctx.globalAlpha = 0.9;
       ctx.lineWidth = brushSize;
+      ctx.shadowBlur = 2;
+      ctx.shadowColor = selectedColor;
     } else if (selectedTool === 'paintbrush') {
-      ctx.globalAlpha = 0.6;
-      ctx.lineWidth = brushSize * 1.5;
+      // Paintbrush: Large, very soft, more transparent
+      ctx.globalAlpha = 0.5;
+      ctx.lineWidth = brushSize * 2;
+      ctx.shadowBlur = 8;
+      ctx.shadowColor = selectedColor;
     }
 
+    // Draw smooth continuous lines using quadratic curves
     if (lastX !== null && lastY !== null) {
-      // Draw line from last point to current point
       ctx.beginPath();
-      ctx.moveTo(lastX, lastY);
-      ctx.lineTo(x, y);
+      
+      if (midX !== undefined && midY !== undefined) {
+        // Use quadratic curve for smoother lines
+        ctx.moveTo(lastX, lastY);
+        ctx.quadraticCurveTo(midX, midY, x, y);
+      } else {
+        // Straight line if no midpoint
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(x, y);
+      }
+      
       ctx.stroke();
     } else {
-      // Draw a dot at the current point
+      // For the first point, draw a circle
       ctx.beginPath();
       ctx.arc(x, y, ctx.lineWidth / 2, 0, Math.PI * 2);
       ctx.fill();
     }
     
+    // Reset shadow and alpha
+    ctx.shadowBlur = 0;
     ctx.globalAlpha = 1.0;
   }, [selectedTool, selectedColor, brushSize]);
 
@@ -266,17 +286,19 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
     if (!ctx) return;
 
     setIsDrawing(true);
+    // Initialize points for smooth drawing
     lastPointRef.current = { x: coords.x, y: coords.y };
+    previousPointRef.current = { x: coords.x, y: coords.y };
 
     if (selectedTool === 'fill') {
       floodFill(ctx, coords.x, coords.y, selectedColor);
       saveToHistory();
       setIsDrawing(false);
       lastPointRef.current = null;
+      previousPointRef.current = null;
     } else {
-      // Start drawing
+      // Draw initial point for drawing tools
       draw(ctx, coords.x, coords.y, null, null);
-      saveToHistory();
     }
   };
 
@@ -291,8 +313,24 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
     if (!ctx) return;
 
     const lastPoint = lastPointRef.current;
+    const previousPoint = previousPointRef.current;
+    
     if (lastPoint) {
-      draw(ctx, coords.x, coords.y, lastPoint.x, lastPoint.y);
+      // Use midpoint for smooth quadratic curves
+      let midX = lastPoint.x;
+      let midY = lastPoint.y;
+      
+      if (previousPoint) {
+        // Calculate midpoint between previous and last point for smoother curves
+        midX = (previousPoint.x + lastPoint.x) / 2;
+        midY = (previousPoint.y + lastPoint.y) / 2;
+      }
+      
+      // Draw smooth curve from last point through midpoint to current point
+      draw(ctx, coords.x, coords.y, lastPoint.x, lastPoint.y, midX, midY);
+      
+      // Update points for next iteration
+      previousPointRef.current = { x: lastPoint.x, y: lastPoint.y };
       lastPointRef.current = { x: coords.x, y: coords.y };
     }
   };
@@ -303,6 +341,7 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
     }
     setIsDrawing(false);
     lastPointRef.current = null;
+    previousPointRef.current = null;
   };
 
   const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -326,16 +365,19 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
     if (!ctx) return;
 
     setIsDrawing(true);
+    // Initialize points for smooth drawing
     lastPointRef.current = { x: coords.x, y: coords.y };
+    previousPointRef.current = { x: coords.x, y: coords.y };
 
     if (selectedTool === 'fill') {
       floodFill(ctx, coords.x, coords.y, selectedColor);
       saveToHistory();
       setIsDrawing(false);
       lastPointRef.current = null;
+      previousPointRef.current = null;
     } else {
+      // Draw initial point for drawing tools
       draw(ctx, coords.x, coords.y, null, null);
-      saveToHistory();
     }
   };
 
@@ -352,8 +394,24 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
     if (!ctx) return;
 
     const lastPoint = lastPointRef.current;
+    const previousPoint = previousPointRef.current;
+    
     if (lastPoint) {
-      draw(ctx, coords.x, coords.y, lastPoint.x, lastPoint.y);
+      // Use midpoint for smooth quadratic curves
+      let midX = lastPoint.x;
+      let midY = lastPoint.y;
+      
+      if (previousPoint) {
+        // Calculate midpoint between previous and last point for smoother curves
+        midX = (previousPoint.x + lastPoint.x) / 2;
+        midY = (previousPoint.y + lastPoint.y) / 2;
+      }
+      
+      // Draw smooth curve from last point through midpoint to current point
+      draw(ctx, coords.x, coords.y, lastPoint.x, lastPoint.y, midX, midY);
+      
+      // Update points for next iteration
+      previousPointRef.current = { x: lastPoint.x, y: lastPoint.y };
       lastPointRef.current = { x: coords.x, y: coords.y };
     }
   };
@@ -365,6 +423,7 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
     }
     setIsDrawing(false);
     lastPointRef.current = null;
+    previousPointRef.current = null;
   };
 
   const handleDownload = () => {
