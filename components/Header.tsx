@@ -38,6 +38,29 @@ export const Header: React.FC = () => {
                 {link.label}
               </a>
             ))}
+            <div className="ml-4 flex items-center gap-2">
+              <a
+                href="https://www.buymeacoffee.com/AmanJain"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition-all shadow-md hover:shadow-lg text-sm font-rounded flex items-center gap-2"
+                title="Buy me a coffee - Support us and help continue creating free content for kids!"
+              >
+                ☕ Buy Coffee
+              </a>
+              <a
+                href="https://www.paypal.com/paypalme/jainaman"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-lg transition-all shadow-md hover:shadow-lg text-sm font-rounded flex items-center gap-2"
+                title="Support us with PayPal - Help us continue creating free content for kids!"
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                PayPal
+              </a>
+            </div>
           </nav>
 
           {/* Mobile menu button */}
@@ -48,7 +71,7 @@ export const Header: React.FC = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </summary>
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
+              <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
                 {navLinks.map((link) => (
                   <a
                     key={link.href}
@@ -58,6 +81,33 @@ export const Header: React.FC = () => {
                     {link.label}
                   </a>
                 ))}
+                <div className="border-t border-gray-200 my-2"></div>
+                <p className="px-4 py-2 text-xs text-gray-500 italic">
+                  Everything is free for kids! Your support helps us create more content.
+                </p>
+                <div className="px-2 space-y-2 mt-2">
+                  <a
+                    href="https://www.buymeacoffee.com/AmanJain"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition-all text-sm font-rounded text-center flex items-center justify-center gap-2"
+                    title="Buy me a coffee - Support us and help continue creating free content for kids!"
+                  >
+                    ☕ Buy Me a Coffee
+                  </a>
+                  <a
+                    href="https://www.paypal.com/paypalme/jainaman"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-lg transition-all text-sm font-rounded text-center flex items-center justify-center gap-2"
+                    title="Support us with PayPal - Help us continue creating free content for kids!"
+                  >
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                    PayPal
+                  </a>
+                </div>
               </div>
             </details>
           </div>
