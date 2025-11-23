@@ -174,6 +174,17 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
     initCanvas();
   }, [initCanvas]);
 
+  // Switch away from black color when on coloring pages (not empty canvas)
+  useEffect(() => {
+    if (!isEmptyCanvas && selectedColor === '#000000') {
+      // Find first non-black color from palette
+      const nonBlackColor = PALETTE_COLORS.find(color => color !== '#000000');
+      if (nonBlackColor) {
+        setSelectedColor(nonBlackColor);
+      }
+    }
+  }, [isEmptyCanvas, selectedColor]);
+
   // Initialize audio
   useEffect(() => {
     audioRef.current = new Audio('/bubble.wav');
@@ -789,7 +800,7 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
       {/* Modern Palette Footer */}
       <div className="bg-white/80 backdrop-blur-xl border-t border-gray-200/50 color-bar-safe px-3 sm:px-4 z-20 shadow-sm animate-slide-in-right">
         <div className="flex overflow-x-auto py-2 gap-2 sm:gap-3 max-w-5xl mx-auto px-3 sm:px-4 scrollbar-hide items-center">
-          {PALETTE_COLORS.map((color, index) => (
+          {PALETTE_COLORS.filter(color => isEmptyCanvas || color !== '#000000').map((color, index) => (
             <button
               key={color}
               onClick={() => {
