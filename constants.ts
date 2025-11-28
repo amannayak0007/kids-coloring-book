@@ -14,6 +14,7 @@ export const PALETTE_COLORS = [
   '#FF69B4', // HotPink
   '#CD853F', // Peru
   '#FF0000', // Red
+  '#2F2F2F', // DarkGray
   '#00FF00', // Lime
   '#0000FF', // Blue
   '#FFFF00', // Yellow

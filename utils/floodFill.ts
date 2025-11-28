@@ -37,9 +37,10 @@ export function floodFill(
     return;
   }
 
-  // Boundary Detection: Do not start fill if clicking on a dark line
-  // Assuming black or very dark grey lines
-  if (startR < 50 && startG < 50 && startB < 50) {
+  // Boundary Detection: Do not start fill if clicking on a very dark line (original image lines)
+  // Only prevent if it's very dark (close to pure black, RGB < 40), not dark gray filled areas
+  // This allows filling over dark gray filled areas (RGB ~47)
+  if (startR < 40 && startG < 40 && startB < 40) {
       return;
   }
 
@@ -80,8 +81,13 @@ export function floodFill(
       Math.abs(g - startG) <= effectiveTolerance &&
       Math.abs(b - startB) <= effectiveTolerance;
 
-    // Strict Boundary check: Stop at dark pixels
-    const isBoundary = r < 90 && g < 90 && b < 90; 
+    // Boundary check: 
+    // 1. Very dark pixels (RGB < 40) are always boundaries (original black lines)
+    // 2. Moderately dark pixels (RGB 40-90) are boundaries only if they don't match start color
+    //    This allows filling over dark gray filled areas when clicking on them
+    const isVeryDarkLine = r < 40 && g < 40 && b < 40; // Original image lines (always boundary)
+    const isModeratelyDark = r < 90 && g < 90 && b < 90 && !isVeryDarkLine; // Dark filled areas
+    const isBoundary = isVeryDarkLine || (isModeratelyDark && !matchesStartColor); 
 
     if (matchesStartColor && !isBoundary) {
       data[offset] = fillR;
