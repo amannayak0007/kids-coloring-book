@@ -34,7 +34,7 @@ export const Gallery: React.FC<GalleryProps> = ({ onSelectPage }) => {
         {/* Download Button */}
         <div className="flex justify-center">
           <a
-            href="https://apps.apple.com/us/app/colouring-and-drawing-for-kids/id6446801004"
+            href="https://apps.apple.com/us/app/colouring-games-for-kids/id6476297325"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 bg-gray-900 hover:bg-gray-800 text-white px-8 py-4 rounded-full font-semibold text-base shadow-lg hover:shadow-xl transition-all font-rounded"
