@@ -18,6 +18,7 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
   const [isReady, setIsReady] = useState(false);
   const [zoom, setZoom] = useState<number>(1);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const backgroundMusicRef = useRef<HTMLAudioElement | null>(null);
   
   // Drawing tools state
   const isEmptyCanvas = page.id === 'empty-canvas';
@@ -198,6 +199,29 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
       }
     };
   }, []);
+
+  // Initialize and play background music when canvas is ready
+  useEffect(() => {
+    if (isReady) {
+      backgroundMusicRef.current = new Audio('/storybg.mp3');
+      backgroundMusicRef.current.preload = 'auto';
+      backgroundMusicRef.current.volume = 0.5;
+      backgroundMusicRef.current.loop = true; // Loop the background music
+      
+      // Play the background music
+      backgroundMusicRef.current.play().catch((error) => {
+        // Ignore errors (e.g., if user hasn't interacted with page yet)
+        console.log('Background music play failed:', error);
+      });
+    }
+    
+    return () => {
+      if (backgroundMusicRef.current) {
+        backgroundMusicRef.current.pause();
+        backgroundMusicRef.current = null;
+      }
+    };
+  }, [isReady]);
 
   // Play sound effect
   const playFillSound = useCallback(() => {
