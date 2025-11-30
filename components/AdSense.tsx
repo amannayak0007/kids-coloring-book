@@ -54,7 +54,7 @@ export const AdSense: React.FC<AdSenseProps> = ({
   }, []);
 
   return (
-    <div className={`adsense-container ${className}`} style={{ minHeight: '100px', width: '100%', ...style }}>
+    <div className={`adsense-container ${className}`} style={{ width: '100%', ...style }}>
       <ins
         ref={adRef}
         className="adsbygoogle"
