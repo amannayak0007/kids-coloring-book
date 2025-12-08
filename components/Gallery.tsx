@@ -31,6 +31,18 @@ export const Gallery: React.FC<GalleryProps> = ({ onSelectPage }) => {
         <p className="text-lg sm:text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto mb-6 sm:mb-8 md:mb-10 font-medium font-rounded">
           Discover hundreds of beautiful coloring pages for kids
         </p>
+        {/* Doodling Button */}
+        <div className="flex justify-center mb-6">
+          <a
+            href="#doodling"
+            className="inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-4 rounded-full font-semibold text-base shadow-lg hover:shadow-xl transition-all font-rounded animate-pulse"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+            </svg>
+            <span>🎨 Start Doodling - Draw on Shapes!</span>
+          </a>
+        </div>
         {/* Download Button */}
         <div className="flex justify-center">
           <a

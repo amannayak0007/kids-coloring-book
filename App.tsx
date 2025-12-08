@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Gallery } from './components/Gallery';
 import { CanvasEditor } from './components/CanvasEditor';
+import { DoodlingEditor } from './components/DoodlingEditor';
 import { PrivacyPolicy } from './components/PrivacyPolicy';
 import { About } from './components/About';
 import { Contact } from './components/Contact';
@@ -12,6 +13,7 @@ import { ColoringPage } from './types';
 
 const App: React.FC = () => {
   const [selectedPage, setSelectedPage] = useState<ColoringPage | null>(null);
+  const [showDoodling, setShowDoodling] = useState<boolean>(false);
   const [currentRoute, setCurrentRoute] = useState<string>('');
 
   // SEO: Update meta tags dynamically based on route
@@ -47,6 +49,11 @@ const App: React.FC = () => {
           title = 'Terms and Conditions - Kids Coloring Web';
           description = 'Read our terms and conditions for using Kids Coloring Web\'s free online coloring pages.';
           canonical = `${baseUrl}/#terms`;
+          break;
+        case 'doodling':
+          title = 'Doodling - Draw on Shapes | Kids Coloring Web';
+          description = 'Get a new shape every day! Rotate, flip, and draw on shapes to release your creative potential. With Dudel Draw, explore your imagination with daily shapes.';
+          canonical = `${baseUrl}/#doodling`;
           break;
         default:
           title = 'Free Online Kids Coloring Pages - Digital Coloring Book for Children';
@@ -104,6 +111,11 @@ const App: React.FC = () => {
     const handleHashChange = () => {
       const hash = window.location.hash.slice(1); // Remove the '#'
       setCurrentRoute(hash);
+      if (hash === 'doodling') {
+        setShowDoodling(true);
+      } else {
+        setShowDoodling(false);
+      }
     };
 
     // Set initial route
@@ -113,6 +125,19 @@ const App: React.FC = () => {
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
+
+  // If doodling is selected, show the doodling editor
+  if (showDoodling) {
+    return (
+      <div className="min-h-screen w-full flex flex-col">
+        <div className="animate-fade-in">
+          <DoodlingEditor 
+            onBack={() => setShowDoodling(false)} 
+          />
+        </div>
+      </div>
+    );
+  }
 
   // If a coloring page is selected, show the editor
   if (selectedPage) {

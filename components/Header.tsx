@@ -7,6 +7,7 @@ export const Header: React.FC = () => {
       label: 'Book',
       external: true 
     },
+    { href: '#doodling', label: 'Doodling' },
     { href: '#blogs', label: 'Blogs' },
     { href: '#about', label: 'About' },
     { href: '#contact', label: 'Contact' },
