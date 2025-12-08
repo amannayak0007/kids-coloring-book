@@ -53,11 +53,60 @@ const App: React.FC = () => {
   const [scale, setScale] = useState(1);
   const canvasRef = useRef<CanvasBoardHandle>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Audio refs
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const backgroundMusicRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     generateNewShape();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  
+  // Initialize audio
+  useEffect(() => {
+    audioRef.current = new Audio('/bubble.wav');
+    audioRef.current.preload = 'auto';
+    audioRef.current.volume = 0.5;
+    
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
+  // Initialize and play background music
+  useEffect(() => {
+    backgroundMusicRef.current = new Audio('/storybg.mp3');
+    backgroundMusicRef.current.preload = 'auto';
+    backgroundMusicRef.current.volume = 0.5;
+    backgroundMusicRef.current.loop = true;
+    
+    // Play the background music
+    backgroundMusicRef.current.play().catch((error) => {
+      // Ignore errors (e.g., if user hasn't interacted with page yet)
+      console.log('Background music play failed:', error);
+    });
+    
+    return () => {
+      if (backgroundMusicRef.current) {
+        backgroundMusicRef.current.pause();
+        backgroundMusicRef.current = null;
+      }
+    };
+  }, []);
+
+  // Play sound effect
+  const playFillSound = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0; // Reset to start
+      audioRef.current.play().catch(() => {
+        // Ignore errors (e.g., if user hasn't interacted with page yet)
+      });
+    }
+  };
 
   // Handle window resize to scale canvas
   useEffect(() => {
@@ -182,7 +231,7 @@ const App: React.FC = () => {
 
       {/* --- Bottom Dock (Drawing Tools) --- */}
       <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-30 w-[95%] max-w-4xl">
-        <div className="bg-white/90 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-[2rem] p-3 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 justify-between">
+        <div className="bg-white/90 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-[2rem] p-3 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 justify-between overflow-visible">
             
             {/* Left: Tools & Size */}
             <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-start">
@@ -223,12 +272,25 @@ const App: React.FC = () => {
             <div className="hidden sm:block w-px h-10 bg-slate-200" />
 
             {/* Right: Colors */}
-            <div className="flex gap-2 overflow-x-auto pb-1 sm:pb-0 w-full sm:w-auto px-1 hide-scrollbar">
+            <div 
+              className="flex gap-2 overflow-x-auto overflow-y-visible py-2 w-full sm:w-auto px-1 hide-scrollbar"
+              style={{ touchAction: 'pan-y' }}
+            >
                 {COLORS.map(c => (
                   <button
                     key={c}
-                    onClick={() => { setBrushColor(c); setTool(ToolType.PEN); }}
-                    className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full shrink-0 border-[3px] transition-transform ${brushColor === c && tool === ToolType.PEN ? 'scale-110 border-slate-200 shadow-md translate-y-[-2px]' : 'border-transparent hover:scale-105'}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setBrushColor(c);
+                      setTool(ToolType.PEN);
+                      playFillSound();
+                    }}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full shrink-0 border-[3px] transition-all ${brushColor === c && tool === ToolType.PEN ? 'scale-110 border-slate-200 shadow-md' : 'border-transparent hover:scale-105'}`}
                     style={{ backgroundColor: c }}
                   />
                 ))}
