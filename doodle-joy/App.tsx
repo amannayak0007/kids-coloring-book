@@ -31,7 +31,7 @@ const EraserToolIcon = ({ className }: { className?: string }) => (
 
 const CANVAS_WIDTH = 850;
 const CANVAS_HEIGHT = 600;
-const COLORS = ['#1e293b', '#dc2626', '#ea580c', '#ca8a04', '#16a34a', '#2563eb', '#9333ea', '#db2777'];
+const COLORS = ['#000000', '#dc2626', '#1e293b', '#ea580c', '#ca8a04', '#16a34a', '#2563eb', '#9333ea', '#db2777'];
 
 const App: React.FC = () => {
   // State
@@ -45,7 +45,7 @@ const App: React.FC = () => {
   });
   const [tool, setTool] = useState<ToolType>(ToolType.PEN);
   const [brushColor, setBrushColor] = useState<string>('#1e293b');
-  const [brushSize, setBrushSize] = useState<number>(12);
+  const [brushSize, setBrushSize] = useState<number>(8);
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
   

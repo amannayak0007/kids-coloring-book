@@ -22,46 +22,117 @@ const randomRange = (min: number, max: number) => Math.random() * (max - min) + 
 /**
  * Generates an organic, blob-like shape.
  * Enhanced with variable complexity, center offset, and lobe variance.
+ * Now includes multiple blob styles for more variety.
  */
 export const generateBlobPath = (width: number, height: number): string => {
   const centerX = width / 2;
   const centerY = height / 2;
   const baseRadius = Math.min(width, height) * 0.35;
   
-  // Complexity: Number of anchor points for the curve
-  const numPoints = Math.floor(randomRange(5, 12));
-  const points: [number, number][] = [];
-  const angleStep = (Math.PI * 2) / numPoints;
+  const blobStyle = Math.random();
+  
+  // STYLE 1: Classic Smooth Blob (40% chance)
+  if (blobStyle < 0.4) {
+    const numPoints = Math.floor(randomRange(6, 14));
+    const points: [number, number][] = [];
+    const angleStep = (Math.PI * 2) / numPoints;
 
-  // Asymmetry: Shift the center of mass slightly
-  const centerOffsetX = randomRange(-30, 30);
-  const centerOffsetY = randomRange(-30, 30);
+    const centerOffsetX = randomRange(-30, 30);
+    const centerOffsetY = randomRange(-30, 30);
+    const noiseFreq = randomRange(1, 4);
+    const stretchX = randomRange(0.7, 1.4);
+    const stretchY = randomRange(0.7, 1.4);
 
-  // Irregularity factors
-  const noiseFreq = randomRange(1, 4); // How many "lobes" or waves
-  const stretchX = randomRange(0.7, 1.4); // Stretch horizontally
-  const stretchY = randomRange(0.7, 1.4); // Stretch vertically
-
-  for (let i = 0; i < numPoints; i++) {
-    const angle = i * angleStep;
-    
-    // Per-point randomness (jitter)
-    const randomPush = randomRange(0.7, 1.3);
-    
-    // Sinusoidal variance to create distinct lobes vs just noise
-    const wave = Math.sin(angle * noiseFreq); // -1 to 1
-    
-    // Combine base radius with wave and jitter
-    // The 0.8 + 0.3*wave ensures we don't go too close to center
-    const r = baseRadius * randomPush * (0.8 + 0.3 * wave);
-    
-    const x = centerX + centerOffsetX + Math.cos(angle) * r * stretchX;
-    const y = centerY + centerOffsetY + Math.sin(angle) * r * stretchY;
-    points.push([x, y]);
+    for (let i = 0; i < numPoints; i++) {
+      const angle = i * angleStep;
+      const randomPush = randomRange(0.7, 1.3);
+      const wave = Math.sin(angle * noiseFreq);
+      const r = baseRadius * randomPush * (0.8 + 0.3 * wave);
+      
+      const x = centerX + centerOffsetX + Math.cos(angle) * r * stretchX;
+      const y = centerY + centerOffsetY + Math.sin(angle) * r * stretchY;
+      points.push([x, y]);
+    }
+    return d3.line().curve(d3.curveBasisClosed)(points) || "";
   }
-
-  // curveBasisClosed creates a very smooth, organic look
-  return d3.line().curve(d3.curveBasisClosed)(points) || "";
+  
+  // STYLE 2: Wavy Blob with Multiple Lobes (30% chance)
+  else if (blobStyle < 0.7) {
+    const numPoints = Math.floor(randomRange(8, 16));
+    const points: [number, number][] = [];
+    const angleStep = (Math.PI * 2) / numPoints;
+    const lobes = Math.floor(randomRange(2, 5));
+    
+    for (let i = 0; i < numPoints; i++) {
+      const angle = i * angleStep;
+      const lobeWave = Math.sin(angle * lobes) * 0.4;
+      const secondaryWave = Math.sin(angle * lobes * 2) * 0.15;
+      const r = baseRadius * (0.75 + lobeWave + secondaryWave + randomRange(-0.1, 0.1));
+      
+      points.push([
+        centerX + Math.cos(angle) * r,
+        centerY + Math.sin(angle) * r
+      ]);
+    }
+    return d3.line().curve(d3.curveBasisClosed)(points) || "";
+  }
+  
+  // STYLE 3: Irregular Amoeba-like (20% chance)
+  else if (blobStyle < 0.9) {
+    const numPoints = Math.floor(randomRange(10, 18));
+    const points: [number, number][] = [];
+    const angleStep = (Math.PI * 2) / numPoints;
+    
+    const centerOffsetX = randomRange(-40, 40);
+    const centerOffsetY = randomRange(-40, 40);
+    
+    for (let i = 0; i < numPoints; i++) {
+      const angle = i * angleStep;
+      // More irregular, less predictable
+      const r1 = Math.sin(angle * 2.3) * 0.3;
+      const r2 = Math.cos(angle * 3.7) * 0.2;
+      const r3 = Math.sin(angle * 5.1) * 0.15;
+      const r = baseRadius * (0.7 + r1 + r2 + r3 + randomRange(-0.15, 0.15));
+      
+      points.push([
+        centerX + centerOffsetX + Math.cos(angle) * r,
+        centerY + centerOffsetY + Math.sin(angle) * r
+      ]);
+    }
+    return d3.line().curve(d3.curveBasisClosed)(points) || "";
+  }
+  
+  // STYLE 4: Elongated Teardrop (10% chance)
+  else {
+    const numPoints = Math.floor(randomRange(12, 20));
+    const points: [number, number][] = [];
+    const angleStep = (Math.PI * 2) / numPoints;
+    
+    const stretch = randomRange(1.3, 1.8); // Elongation factor
+    const direction = Math.random() * Math.PI * 2; // Random orientation
+    
+    for (let i = 0; i < numPoints; i++) {
+      const angle = i * angleStep;
+      // Create teardrop shape - wider at one end, narrow at the other
+      const progress = (angle + Math.PI) / (Math.PI * 2);
+      const teardropFactor = Math.sin(progress * Math.PI);
+      const r = baseRadius * (0.6 + teardropFactor * 0.5 + randomRange(-0.1, 0.1));
+      
+      // Apply stretch in a random direction
+      const x = Math.cos(angle) * r;
+      const y = Math.sin(angle) * r * stretch;
+      
+      // Rotate to random direction
+      const rotatedX = x * Math.cos(direction) - y * Math.sin(direction);
+      const rotatedY = x * Math.sin(direction) + y * Math.cos(direction);
+      
+      points.push([
+        centerX + rotatedX,
+        centerY + rotatedY
+      ]);
+    }
+    return d3.line().curve(d3.curveBasisClosed)(points) || "";
+  }
 };
 
 /**
@@ -69,6 +140,11 @@ export const generateBlobPath = (width: number, height: number): string => {
  * 1. Spiky/Star-like
  * 2. Blocky/Orthogonal (Step curve)
  * 3. Asymmetric Polygon
+ * 4. Rounded Rectangle
+ * 5. Diamond/Hexagon
+ * 6. Curved Star
+ * 7. Multi-lobed Shape
+ * 8. Heart-like
  */
 export const generateGeometricPath = (width: number, height: number): string => {
   const centerX = width / 2;
@@ -77,8 +153,8 @@ export const generateGeometricPath = (width: number, height: number): string => 
 
   const style = Math.random();
 
-  // STYLE 1: Spiky Star / Burst (30% chance)
-  if (style < 0.3) {
+  // STYLE 1: Spiky Star / Burst (15% chance)
+  if (style < 0.15) {
     const points: [number, number][] = [];
     const spikes = Math.floor(randomRange(5, 12));
     const innerMult = randomRange(0.3, 0.65); // Depth of the spikes
@@ -101,9 +177,9 @@ export const generateGeometricPath = (width: number, height: number): string => 
     return d3.line().curve(d3.curveLinearClosed)(points) || "";
   } 
   
-  // STYLE 2: Blocky / Orthogonal (40% chance) 
+  // STYLE 2: Blocky / Orthogonal (20% chance) 
   // Uses curveStepClosed to create 90-degree angles
-  else if (style < 0.7) {
+  else if (style < 0.35) {
     const points: [number, number][] = [];
     const steps = Math.floor(randomRange(5, 10));
     
@@ -124,8 +200,8 @@ export const generateGeometricPath = (width: number, height: number): string => 
     return d3.line().curve(d3.curveStepClosed)(points) || "";
   } 
   
-  // STYLE 3: Sharp Asymmetric Polygon (30% chance)
-  else {
+  // STYLE 3: Sharp Asymmetric Polygon (15% chance)
+  else if (style < 0.5) {
     const points: [number, number][] = [];
     const vertices = Math.floor(randomRange(3, 7)); // Triangles to Heptagons
     
@@ -143,5 +219,125 @@ export const generateGeometricPath = (width: number, height: number): string => 
         ]);
     }
     return d3.line().curve(d3.curveLinearClosed)(points) || "";
+  }
+  
+  // STYLE 4: Rounded Rectangle / Squircle (10% chance)
+  else if (style < 0.6) {
+    const w = baseRadius * randomRange(1.2, 1.8);
+    const h = baseRadius * randomRange(1.2, 1.8);
+    const rx = baseRadius * randomRange(0.2, 0.4);
+    const ry = baseRadius * randomRange(0.2, 0.4);
+    
+    const points: [number, number][] = [];
+    const segments = 16; // More segments for smoother curves
+    
+    for (let i = 0; i < segments; i++) {
+      const t = (i / segments) * Math.PI * 2;
+      let x, y;
+      
+      if (t < Math.PI / 2) {
+        // Top-right corner
+        x = centerX + w / 2 - rx + rx * Math.cos(t);
+        y = centerY - h / 2 + ry - ry * Math.sin(t);
+      } else if (t < Math.PI) {
+        // Top-left corner
+        x = centerX - w / 2 + rx - rx * Math.cos(t);
+        y = centerY - h / 2 + ry - ry * Math.sin(t);
+      } else if (t < Math.PI * 1.5) {
+        // Bottom-left corner
+        x = centerX - w / 2 + rx - rx * Math.cos(t);
+        y = centerY + h / 2 - ry + ry * Math.sin(t);
+      } else {
+        // Bottom-right corner
+        x = centerX + w / 2 - rx + rx * Math.cos(t);
+        y = centerY + h / 2 - ry + ry * Math.sin(t);
+      }
+      
+      points.push([x, y]);
+    }
+    return d3.line().curve(d3.curveBasisClosed)(points) || "";
+  }
+  
+  // STYLE 5: Diamond / Hexagon (10% chance)
+  else if (style < 0.7) {
+    const points: [number, number][] = [];
+    const sides = Math.floor(randomRange(4, 8)); // Diamond to Octagon
+    const radius = baseRadius * randomRange(0.8, 1.2);
+    
+    for (let i = 0; i < sides; i++) {
+      const angle = (i / sides) * Math.PI * 2 - Math.PI / 2; // Start from top
+      const r = radius * randomRange(0.9, 1.1);
+      points.push([
+        centerX + Math.cos(angle) * r,
+        centerY + Math.sin(angle) * r
+      ]);
+    }
+    return d3.line().curve(d3.curveLinearClosed)(points) || "";
+  }
+  
+  // STYLE 6: Curved Star (10% chance)
+  else if (style < 0.8) {
+    const points: [number, number][] = [];
+    const spikes = Math.floor(randomRange(5, 10));
+    const innerMult = randomRange(0.4, 0.7);
+    
+    for (let i = 0; i < spikes * 2; i++) {
+      const angle = (Math.PI * i) / spikes;
+      const isOuter = i % 2 === 0;
+      const r = baseRadius * (isOuter ? randomRange(0.9, 1.2) : innerMult);
+      
+      points.push([
+        centerX + Math.cos(angle) * r,
+        centerY + Math.sin(angle) * r
+      ]);
+    }
+    // Use curveBasisClosed for smooth curves instead of sharp points
+    return d3.line().curve(d3.curveBasisClosed)(points) || "";
+  }
+  
+  // STYLE 7: Multi-lobed Shape (10% chance)
+  else if (style < 0.9) {
+    const points: [number, number][] = [];
+    const lobes = Math.floor(randomRange(3, 6));
+    const numPoints = lobes * 8;
+    
+    for (let i = 0; i < numPoints; i++) {
+      const angle = (i / numPoints) * Math.PI * 2;
+      const lobeWave = Math.sin(angle * lobes) * 0.3;
+      const r = baseRadius * (0.7 + lobeWave + randomRange(-0.1, 0.1));
+      
+      points.push([
+        centerX + Math.cos(angle) * r,
+        centerY + Math.sin(angle) * r
+      ]);
+    }
+    return d3.line().curve(d3.curveBasisClosed)(points) || "";
+  }
+  
+  // STYLE 8: Heart-like / Teardrop (10% chance)
+  else {
+    const points: [number, number][] = [];
+    const numPoints = 20;
+    
+    for (let i = 0; i < numPoints; i++) {
+      const t = (i / numPoints) * Math.PI * 2;
+      let r: number;
+      
+      // Create heart-like shape
+      if (t < Math.PI) {
+        // Top half - two lobes
+        const lobeAngle = t < Math.PI / 2 ? t * 2 : (Math.PI - t) * 2;
+        r = baseRadius * (0.5 + 0.5 * Math.cos(lobeAngle));
+      } else {
+        // Bottom half - point
+        r = baseRadius * (0.3 + 0.7 * (1 - (t - Math.PI) / Math.PI));
+      }
+      
+      points.push([
+        centerX + Math.cos(t) * r,
+        centerY + Math.sin(t) * r
+      ]);
+    }
+    return d3.line().curve(d3.curveBasisClosed)(points) || "";
   }
 };
