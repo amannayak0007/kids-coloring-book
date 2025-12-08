@@ -6,12 +6,99 @@ import { PrivacyPolicy } from './components/PrivacyPolicy';
 import { About } from './components/About';
 import { Contact } from './components/Contact';
 import { TermsAndConditions } from './components/TermsAndConditions';
+import { Blogs } from './components/Blogs';
 import { AdSense } from './components/AdSense';
 import { ColoringPage } from './types';
 
 const App: React.FC = () => {
   const [selectedPage, setSelectedPage] = useState<ColoringPage | null>(null);
   const [currentRoute, setCurrentRoute] = useState<string>('');
+
+  // SEO: Update meta tags dynamically based on route
+  useEffect(() => {
+    const updateMetaTags = (route: string) => {
+      const baseUrl = 'https://kidscoloringweb.com';
+      let title = 'Free Online Kids Coloring Pages - Digital Coloring Book for Children';
+      let description = 'Free online coloring pages for kids! Color animals, nature, vehicles, mandala, and more. Interactive digital coloring book with hundreds of printable coloring pages.';
+      let canonical = baseUrl;
+
+      switch (route) {
+        case 'about':
+          title = 'About Us - Kids Coloring Web | Free Online Coloring Pages';
+          description = 'Learn about Kids Coloring Web - your free online coloring book for kids. Discover our mission to provide fun, educational coloring pages for children.';
+          canonical = `${baseUrl}/#about`;
+          break;
+        case 'contact':
+          title = 'Contact Us - Kids Coloring Web | Get in Touch';
+          description = 'Contact Kids Coloring Web. Have questions or feedback? We\'d love to hear from you about our free online coloring pages for kids.';
+          canonical = `${baseUrl}/#contact`;
+          break;
+        case 'blogs':
+          title = 'Coloring Blog - Tips, Ideas & Activities for Kids | Kids Coloring Web';
+          description = 'Discover coloring tips, creative ideas, and fun activities for kids. Read our blog about coloring pages, art education, and children\'s creativity.';
+          canonical = `${baseUrl}/#blogs`;
+          break;
+        case 'privacy':
+          title = 'Privacy Policy - Kids Coloring Web';
+          description = 'Read our privacy policy to understand how we protect your information on Kids Coloring Web.';
+          canonical = `${baseUrl}/#privacy`;
+          break;
+        case 'terms':
+          title = 'Terms and Conditions - Kids Coloring Web';
+          description = 'Read our terms and conditions for using Kids Coloring Web\'s free online coloring pages.';
+          canonical = `${baseUrl}/#terms`;
+          break;
+        default:
+          title = 'Free Online Kids Coloring Pages - Digital Coloring Book for Children';
+          description = 'Free online coloring pages for kids! Color animals, nature, vehicles, mandala, and more. Interactive digital coloring book with hundreds of printable coloring pages.';
+          canonical = baseUrl;
+      }
+
+      // Update title
+      document.title = title;
+
+      // Update or create meta tags
+      const updateMetaTag = (name: string, content: string, isProperty = false) => {
+        const selector = isProperty ? `meta[property="${name}"]` : `meta[name="${name}"]`;
+        let meta = document.querySelector(selector) as HTMLMetaElement;
+        if (!meta) {
+          meta = document.createElement('meta');
+          if (isProperty) {
+            meta.setAttribute('property', name);
+          } else {
+            meta.setAttribute('name', name);
+          }
+          document.head.appendChild(meta);
+        }
+        meta.setAttribute('content', content);
+      };
+
+      // Update description
+      updateMetaTag('description', description);
+      updateMetaTag('og:description', description, true);
+      updateMetaTag('twitter:description', description);
+
+      // Update title
+      updateMetaTag('title', title);
+      updateMetaTag('og:title', title, true);
+      updateMetaTag('twitter:title', title);
+
+      // Update canonical
+      let canonicalLink = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
+      if (!canonicalLink) {
+        canonicalLink = document.createElement('link');
+        canonicalLink.setAttribute('rel', 'canonical');
+        document.head.appendChild(canonicalLink);
+      }
+      canonicalLink.setAttribute('href', canonical);
+
+      // Update OG URL
+      updateMetaTag('og:url', canonical, true);
+      updateMetaTag('twitter:url', canonical);
+    };
+
+    updateMetaTags(currentRoute);
+  }, [currentRoute]);
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -55,8 +142,8 @@ const App: React.FC = () => {
       </div>
       {children}
       {/* Bottom Ad Space - Web Only */}
-      <div className="w-full bg-gray-50/50 py-2 flex justify-center items-center">
-        <div className="max-w-7xl w-full px-4">
+      <div className="w-full flex justify-center items-center">
+        <div className="max-w-7xl w-full">
           <AdSense 
             className="mx-auto"
             style={{ minHeight: '90px', maxWidth: '728px', margin: '0 auto' }}
@@ -93,6 +180,12 @@ const App: React.FC = () => {
             <TermsAndConditions />
           </ContentPageWrapper>
         );
+      case 'blogs':
+        return (
+          <ContentPageWrapper>
+            <Blogs />
+          </ContentPageWrapper>
+        );
       default:
         return (
           <>
@@ -101,8 +194,8 @@ const App: React.FC = () => {
               <Gallery onSelectPage={setSelectedPage} />
             </main>
             {/* Bottom Ad Space - Web Only */}
-            <div className="w-full bg-gray-50/50 py-2 flex justify-center items-center">
-              <div className="max-w-7xl w-full px-4">
+            <div className="w-full flex justify-center items-center">
+              <div className="max-w-7xl w-full">
                 <AdSense 
                   className="mx-auto"
                   style={{ minHeight: '90px', maxWidth: '728px', margin: '0 auto' }}
@@ -143,7 +236,17 @@ const App: React.FC = () => {
                     <p className="text-xs text-gray-500">
                       © 2025
                     </p>
-                    <p className="text-xs mt-2 text-gray-500">Made with ❤️ for lil artists</p>
+                    <p className="text-xs mt-2 text-gray-500">
+                      Made with ❤️ by{' '}
+                      <a 
+                        href="https://digitalhole.in/" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="hover:text-purple-600 transition-colors"
+                      >
+                        Digital Hole Pvt. Ltd.
+                      </a>
+                    </p>
                   </div>
                 </div>
                 <div className="border-t border-gray-200/50 pt-8 mt-8 text-center">

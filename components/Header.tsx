@@ -2,6 +2,12 @@ import React from 'react';
 
 export const Header: React.FC = () => {
   const navLinks = [
+    { 
+      href: 'https://www.amazon.com/Lil-Artist-Featuring-Vegetables-Creatures/dp/B0F9LHDJ4V/ref=sr_1_2?crid=2NXRQSLYUTL8Y&dib=eyJ2IjoiMSJ9.Zb_vhRwcPK1JcAzzuIsGh3jXSB3gELdOJg7IfWMQv3lJxjuXgWBKHjoRGLgDTVsTedlPJ0JqOqpZRFLdPKjAHAWC23qI2GQZ5g6qOyqlEVgeiWtng0zkxtcHMycOgGCE2Gcetm5RzN8MvVWiXhXgo0ZjgyvW2vU2RzaGd2CeZwrK1HjG1qMMjzg8rPtkCF_zBqut7an0E0YInzhdcpZwe9KDc57Ncj5Ob7XMpoILW-k.3cQDHlvh-A3PT0-CIbCNFFeP77IFuggedYuDi0chSAg&dib_tag=se&keywords=Lil+Artist+coloring&qid=1765217278&sprefix=lil+artist+colori%2Caps%2C317&sr=8-2', 
+      label: 'Book',
+      external: true 
+    },
+    { href: '#blogs', label: 'Blogs' },
     { href: '#about', label: 'About' },
     { href: '#contact', label: 'Contact' },
     { href: '#privacy', label: 'Privacy' },
@@ -22,7 +28,8 @@ export const Header: React.FC = () => {
           >
             <img 
               src="/icon.png" 
-              alt="Colouring Books For Kids" 
+              alt="Kids Coloring Web - Free Online Coloring Pages Logo" 
+              title="Kids Coloring Web - Free Online Coloring Pages"
               className="w-8 h-8 object-contain"
             />
             Colouring Books For Kids
@@ -33,6 +40,8 @@ export const Header: React.FC = () => {
               <a
                 key={link.href}
                 href={link.href}
+                target={link.external ? '_blank' : undefined}
+                rel={link.external ? 'noopener noreferrer' : undefined}
                 className="text-gray-700 hover:text-purple-600 font-medium transition-colors text-sm font-rounded"
               >
                 {link.label}
@@ -76,6 +85,8 @@ export const Header: React.FC = () => {
                   <a
                     key={link.href}
                     href={link.href}
+                    target={link.external ? '_blank' : undefined}
+                    rel={link.external ? 'noopener noreferrer' : undefined}
                     className="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors text-sm font-rounded"
                   >
                     {link.label}

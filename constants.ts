@@ -83,7 +83,7 @@ export const CATEGORIES: Category[] = [
     bgTheme: 'bg-orange-50',
     items: Array.from({ length: 24 }, (_, i) => ({
       id: `a_big_${i + 1}`,
-      title: `Animal ${i + 1}`,
+      title: `Free Animal Coloring Page ${i + 1} - Kids Coloring Book`,
       imageSrc: `/Animals/A_big_${i + 1}.png`,
       thumbnailSrc: `/Animals/A_big_${i + 1}.png`
     }))
@@ -95,7 +95,7 @@ export const CATEGORIES: Category[] = [
     bgTheme: 'bg-red-50',
     items: Array.from({ length: 10 }, (_, i) => ({
       id: `c_big_${i + 1}`,
-      title: `Christmas ${i + 1}`,
+      title: `Free Christmas Coloring Page ${i + 1} - Holiday Coloring for Kids`,
       imageSrc: `/Christmas/C_big_${i + 1}.png`,
       thumbnailSrc: `/Christmas/C_big_${i + 1}.png`
     }))
@@ -107,7 +107,7 @@ export const CATEGORIES: Category[] = [
     bgTheme: 'bg-green-50',
     items: Array.from({ length: 14 }, (_, i) => ({
       id: `f_big_${i + 1}`,
-      title: `Fruit ${i + 1}`,
+      title: `Free Fruit Coloring Page ${i + 1} - Healthy Food Coloring for Kids`,
       imageSrc: `/Fruits/F_big_${i + 1}.png`,
       thumbnailSrc: `/Fruits/F_big_${i + 1}.png`
     }))
@@ -119,7 +119,7 @@ export const CATEGORIES: Category[] = [
     bgTheme: 'bg-blue-50',
     items: Array.from({ length: 11 }, (_, i) => ({
       id: `g_big_${i + 1}`,
-      title: `Geometry ${i + 1}`,
+      title: `Free Geometry Coloring Page ${i + 1} - Shapes and Patterns for Kids`,
       imageSrc: `/Geometry/G_big_${i + 1}.png`,
       thumbnailSrc: `/Geometry/G_big_${i + 1}.png`
     }))
@@ -131,7 +131,7 @@ export const CATEGORIES: Category[] = [
     bgTheme: 'bg-emerald-50',
     items: Array.from({ length: 7 }, (_, i) => ({
       id: `n_big_${i + 1}`,
-      title: `Nature ${i + 1}`,
+      title: `Free Nature Coloring Page ${i + 1} - Outdoor Scenes for Kids`,
       imageSrc: `/Nature/N_big_${i + 1}.png`,
       thumbnailSrc: `/Nature/N_big_${i + 1}.png`
     }))
@@ -143,7 +143,7 @@ export const CATEGORIES: Category[] = [
     bgTheme: 'bg-yellow-50',
     items: Array.from({ length: 23 }, (_, i) => ({
       id: `p_big_${i + 1}`,
-      title: `People ${i + 1}`,
+      title: `Free People Coloring Page ${i + 1} - Character Coloring for Kids`,
       imageSrc: `/People/P_big_${i + 1}.png`,
       thumbnailSrc: `/People/P_big_${i + 1}.png`
     }))
@@ -155,7 +155,7 @@ export const CATEGORIES: Category[] = [
     bgTheme: 'bg-indigo-50',
     items: Array.from({ length: 11 }, (_, i) => ({
       id: `s_big_${i + 1}`,
-      title: `Shape ${i + 1}`,
+      title: `Free Shape Coloring Page ${i + 1} - Geometric Shapes for Kids`,
       imageSrc: `/Shape/S_big_${i + 1}.png`,
       thumbnailSrc: `/Shape/S_big_${i + 1}.png`
     }))
@@ -167,7 +167,7 @@ export const CATEGORIES: Category[] = [
     bgTheme: 'bg-slate-50',
     items: Array.from({ length: 12 }, (_, i) => ({
       id: `v_big_${i + 1}`,
-      title: `Vehicle ${i + 1}`,
+      title: `Free Vehicle Coloring Page ${i + 1} - Cars, Trucks, and More for Kids`,
       imageSrc: `/Vehicle/V_big_${i + 1}.png`,
       thumbnailSrc: `/Vehicle/V_big_${i + 1}.png`
     }))
@@ -179,7 +179,7 @@ export const CATEGORIES: Category[] = [
     bgTheme: 'bg-purple-50',
     items: Array.from({ length: 11 }, (_, i) => ({
       id: `mandala_big_${i + 1}`,
-      title: `Mandala ${i + 1}`,
+      title: `Free Mandala Coloring Page ${i + 1} - Intricate Patterns for Kids`,
       imageSrc: `/Mandala/Big/Mandala_big_${i + 1}.png`,
       thumbnailSrc: `/Mandala/Big/Mandala_big_${i + 1}.png`
     }))
@@ -191,7 +191,7 @@ export const CATEGORIES: Category[] = [
     bgTheme: 'bg-rose-50',
     items: Array.from({ length: 15 }, (_, i) => ({
       id: `culture_big_${i + 1}`,
-      title: `Culture ${i + 1}`,
+      title: `Free Cultural Coloring Page ${i + 1} - World Culture Art for Kids`,
       imageSrc: `/Culture/Big/Culture_big_${i + 1}.png`,
       thumbnailSrc: `/Culture/Big/Culture_big_${i + 1}.png`
     }))
@@ -203,7 +203,7 @@ export const CATEGORIES: Category[] = [
     bgTheme: 'bg-cyan-50',
     items: Array.from({ length: 14 }, (_, i) => ({
       id: `landmark_big_${i + 1}`,
-      title: `Landmark ${i + 1}`,
+      title: `Free Landmark Coloring Page ${i + 1} - Famous Places for Kids`,
       imageSrc: `/Landmark/Big/Landmark_big_${i + 1}.png`,
       thumbnailSrc: `/Landmark/Big/Landmark_big_${i + 1}.png`
     }))
@@ -215,7 +215,7 @@ export const CATEGORIES: Category[] = [
     bgTheme: 'bg-teal-50',
     items: Array.from({ length: 6 }, (_, i) => ({
       id: `madhubani_big_${i + 1}`,
-      title: `Madhubani ${i + 1}`,
+      title: `Free Madhubani Art Coloring Page ${i + 1} - Traditional Indian Art for Kids`,
       imageSrc: `/Madhubani/Big/Madhubani_big_${i + 1}.png`,
       thumbnailSrc: `/Madhubani/Big/Madhubani_big_${i + 1}.png`
     }))
@@ -227,7 +227,7 @@ export const CATEGORIES: Category[] = [
     bgTheme: 'bg-sky-50',
     items: Array.from({ length: 20 }, (_, i) => ({
       id: `origami_big_${i + 1}`,
-      title: `Origami ${i + 1}`,
+      title: `Free Origami Coloring Page ${i + 1} - Paper Art Designs for Kids`,
       imageSrc: `/Origami/Big/Origami_big_${i + 1}.png`,
       thumbnailSrc: `/Origami/Big/Origami_big_${i + 1}.png`
     }))
@@ -239,7 +239,7 @@ export const CATEGORIES: Category[] = [
     bgTheme: 'bg-lime-50',
     items: Array.from({ length: 8 }, (_, i) => ({
       id: `outdoor_big_${i + 1}`,
-      title: `Outdoor ${i + 1}`,
+      title: `Free Outdoor Coloring Page ${i + 1} - Nature and Adventure for Kids`,
       imageSrc: `/Outdoor/Big/Outdoor_big_${i + 1}.png`,
       thumbnailSrc: `/Outdoor/Big/Outdoor_big_${i + 1}.png`
     }))

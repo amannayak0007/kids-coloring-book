@@ -1,0 +1,24 @@
+# robots.txt for Kids Coloring Web
+# https://kidscoloringweb.com/robots.txt
+
+User-agent: *
+Allow: /
+
+# Disallow admin or private areas if any
+# Disallow: /admin/
+# Disallow: /private/
+
+# Allow all important pages
+Allow: /
+Allow: /#about
+Allow: /#contact
+Allow: /#blogs
+Allow: /#privacy
+Allow: /#terms
+
+# Sitemap location
+Sitemap: https://kidscoloringweb.com/sitemap.xml
+
+# Crawl-delay (optional, helps prevent server overload)
+Crawl-delay: 1
+

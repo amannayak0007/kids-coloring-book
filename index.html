@@ -9,12 +9,16 @@
     <title>Free Online Kids Coloring Pages - Digital Coloring Book for Children</title>
     <meta name="title" content="Free Online Kids Coloring Pages - Digital Coloring Book for Children" />
     <meta name="description" content="Free online coloring pages for kids! Color animals, nature, vehicles, mandala, and more. Interactive digital coloring book with hundreds of printable coloring pages. Perfect for children's creativity and learning." />
-    <meta name="keywords" content="kids coloring pages, free coloring pages, online coloring book, children coloring, printable coloring pages, digital coloring, coloring games for kids, mandala coloring, animal coloring pages, nature coloring" />
+    <meta name="keywords" content="kids coloring pages, free coloring pages, online coloring book, children coloring, printable coloring pages, digital coloring, coloring games for kids, mandala coloring, animal coloring pages, nature coloring, coloring book for kids, free printable coloring sheets, kids activities, educational coloring, interactive coloring" />
     <meta name="author" content="Kids Coloring Web" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
     <meta name="language" content="English" />
     <meta name="revisit-after" content="7 days" />
     <meta name="theme-color" content="#8B5E6C" />
+    <meta name="geo.region" content="US" />
+    <meta name="geo.placename" content="United States" />
+    <meta name="rating" content="general" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -40,8 +44,15 @@
     <link rel="canonical" href="https://kidscoloringweb.com/" />
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" href="/icon.png" />
+    <link rel="apple-touch-icon" href="/icon.png" />
+    
+    <!-- Additional SEO Links -->
+    <link rel="alternate" type="application/rss+xml" title="Kids Coloring Web" href="https://kidscoloringweb.com/rss.xml" />
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://www.google-analytics.com" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
     
     <!-- Structured Data (JSON-LD) for SEO -->
     <script type="application/ld+json">
@@ -49,10 +60,12 @@
       "@context": "https://schema.org",
       "@type": "WebApplication",
       "name": "Kids Coloring Web",
-      "description": "Free online coloring pages for kids with interactive digital coloring tools",
+      "alternateName": "Free Online Kids Coloring Pages",
+      "description": "Free online coloring pages for kids with interactive digital coloring tools. Hundreds of printable coloring pages including animals, nature, vehicles, mandala, and more.",
       "url": "https://kidscoloringweb.com",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
       "offers": {
         "@type": "Offer",
         "price": "0",
@@ -61,15 +74,23 @@
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "4.8",
-        "ratingCount": "1250"
+        "ratingCount": "1250",
+        "bestRating": "5",
+        "worstRating": "1"
       },
       "featureList": [
         "Free coloring pages",
         "Interactive fill tool",
         "Multiple categories",
         "Printable pages",
-        "No registration required"
-      ]
+        "No registration required",
+        "Hundreds of coloring pages",
+        "Animal coloring pages",
+        "Nature coloring pages",
+        "Mandala coloring pages"
+      ],
+      "screenshot": "https://kidscoloringweb.com/icon.png",
+      "softwareVersion": "1.0"
     }
     </script>
     
@@ -78,12 +99,37 @@
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": "Kids Coloring Web",
+      "alternateName": "Free Online Kids Coloring Pages",
       "url": "https://kidscoloringweb.com",
+      "description": "Free online coloring pages for kids! Color animals, nature, vehicles, mandala, and more. Interactive digital coloring book with hundreds of printable coloring pages.",
+      "inLanguage": "en-US",
       "potentialAction": {
         "@type": "SearchAction",
-        "target": "https://kidscoloringweb.com/?search={search_term_string}",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://kidscoloringweb.com/?search={search_term_string}"
+        },
         "query-input": "required name=search_term_string"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Digital Hole Pvt. Ltd.",
+        "url": "https://digitalhole.in/"
       }
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Kids Coloring Web",
+      "url": "https://kidscoloringweb.com",
+      "logo": "https://kidscoloringweb.com/icon.png",
+      "description": "Free online coloring pages for kids with interactive digital coloring tools",
+      "sameAs": [
+        "https://apps.apple.com/us/app/colouring-and-drawing-for-kids/id6446801004"
+      ]
     }
     </script>
     

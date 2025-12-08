@@ -119,7 +119,9 @@ export const Gallery: React.FC<GalleryProps> = ({ onSelectPage }) => {
                   <div className="aspect-square p-5">
                     <img 
                       src={item.thumbnailSrc} 
-                      alt={item.title} 
+                      alt={`${item.title} - Free Printable Coloring Page for Kids`}
+                      title={`Click to color ${item.title} - Free online coloring page`}
+                      loading="lazy"
                       className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
