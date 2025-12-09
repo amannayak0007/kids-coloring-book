@@ -17,6 +17,7 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
   const [selectedColor, setSelectedColor] = useState<string>(PALETTE_COLORS[2]); 
   const [isReady, setIsReady] = useState(false);
   const [zoom, setZoom] = useState<number>(1);
+  const pinchStateRef = useRef<{ initialDistance: number; initialZoom: number } | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const backgroundMusicRef = useRef<HTMLAudioElement | null>(null);
   
@@ -47,6 +48,15 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
   const [canUndo, setCanUndo] = useState<boolean>(false);
   const [canRedo, setCanRedo] = useState<boolean>(false);
   const maxHistorySize = 50;
+
+  const clampZoom = useCallback((value: number) => Math.min(2.5, Math.max(0.5, value)), []);
+  const getTouchDistance = useCallback((touches: TouchList) => {
+    if (touches.length < 2) return null;
+    const [t1, t2] = [touches[0], touches[1]];
+    const dx = t1.clientX - t2.clientX;
+    const dy = t1.clientY - t2.clientY;
+    return Math.hypot(dx, dy);
+  }, []);
 
   // Save state to history
   const saveToHistory = useCallback(() => {
@@ -187,6 +197,21 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
   useEffect(() => {
     initCanvas();
   }, [initCanvas]);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      if (!e.ctrlKey) return;
+      e.preventDefault();
+      const delta = -e.deltaY * 0.001;
+      setZoom(prev => clampZoom(prev + delta));
+    };
+
+    container.addEventListener('wheel', handleWheel, { passive: false });
+    return () => container.removeEventListener('wheel', handleWheel);
+  }, [clampZoom]);
 
   // Switch away from black color when on coloring pages (not empty canvas)
   useEffect(() => {
@@ -453,6 +478,19 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
   const handleCanvasTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
     e.preventDefault();
     if (!isReady) return;
+
+    if (e.touches.length === 2) {
+      const distance = getTouchDistance(e.touches);
+      if (distance) {
+        pinchStateRef.current = { initialDistance: distance, initialZoom: zoom };
+      }
+      setIsDrawing(false);
+      lastPointRef.current = null;
+      previousPointRef.current = null;
+      return;
+    }
+
+    pinchStateRef.current = null;
     const touch = e.touches[0];
     const coords = getCanvasCoordinates(touch.clientX, touch.clientY);
     if (!coords) return;
@@ -484,7 +522,19 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
 
   const handleCanvasTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
     e.preventDefault();
-    if (!isReady || !isDrawing || selectedTool === 'fill') return;
+    if (!isReady) return;
+
+    if (e.touches.length === 2 && pinchStateRef.current) {
+      const distance = getTouchDistance(e.touches);
+      if (distance) {
+        const scale = distance / pinchStateRef.current.initialDistance;
+        setZoom(clampZoom(pinchStateRef.current.initialZoom * scale));
+      }
+      return;
+    }
+
+    if (e.touches.length > 1) return;
+    if (!isDrawing || selectedTool === 'fill') return;
     const touch = e.touches[0];
     const coords = getCanvasCoordinates(touch.clientX, touch.clientY);
     if (!coords) return;
@@ -525,6 +575,13 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
 
   const handleCanvasTouchEnd = (e: React.TouchEvent<HTMLCanvasElement>) => {
     e.preventDefault();
+    if (pinchStateRef.current) {
+      pinchStateRef.current = null;
+      setIsDrawing(false);
+      lastPointRef.current = null;
+      previousPointRef.current = null;
+      return;
+    }
     if (isDrawing && selectedTool !== 'fill') {
       saveToHistory();
     }
