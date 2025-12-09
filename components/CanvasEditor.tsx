@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { ColoringPage } from '../types';
 import { PALETTE_COLORS } from '../constants';
 import { floodFill } from '../utils/floodFill';
@@ -27,6 +27,19 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
   const [isDrawing, setIsDrawing] = useState<boolean>(false);
   const lastPointRef = useRef<{ x: number; y: number } | null>(null);
   const previousPointRef = useRef<{ x: number; y: number } | null>(null);
+
+  // Cute cursor builder for all drawing/fill interactions
+  const createCuteCursor = useCallback((color: string) => {
+    const svg = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="48" viewBox="0 0 36 48">
+        <path d="M4 2 L4 31 L12 23 L18 35 L22 33 L16 21 L27 21 Z" fill="${color}" stroke="%23ffffff" stroke-width="2" stroke-linejoin="round"/>
+      </svg>
+    `;
+    // Hotspot near the tip of the arrow for precise coloring
+    return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}") 4 2, auto`;
+  }, []);
+
+  const cursorStyle = useMemo(() => createCuteCursor(selectedColor), [createCuteCursor, selectedColor]);
   
   // Undo/Redo state
   const historyRef = useRef<ImageData[]>([]);
@@ -833,13 +846,8 @@ export const CanvasEditor: React.FC<CanvasEditorProps> = ({ page, onBack }) => {
         >
           <canvas 
             ref={canvasRef}
-            className={`w-full h-full object-contain ${
-              selectedTool === 'fill' ? 'cursor-crosshair' : 
-              selectedTool === 'brush' ? 'cursor-cell' :
-              selectedTool === 'pen' ? 'cursor-text' : 
-              selectedTool === 'spray' ? 'cursor-crosshair' :
-              selectedTool === 'eraser' ? 'cursor-cell' : 'cursor-grab'
-            }`}
+            className="w-full h-full object-contain"
+            style={{ cursor: cursorStyle }}
             onClick={handleCanvasClick}
             onMouseDown={handleCanvasMouseDown}
             onMouseMove={handleCanvasMouseMove}

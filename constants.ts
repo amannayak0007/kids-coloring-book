@@ -106,7 +106,7 @@ export const CATEGORIES: Category[] = [
     title: 'Coloring Fruits',
     colorTheme: 'text-green-600',
     bgTheme: 'bg-green-50',
-    items: Array.from({ length: 14 }, (_, i) => ({
+    items: Array.from({ length: 18 }, (_, i) => ({
       id: `f_big_${i + 1}`,
       title: `Fruit ${i + 1}`,
       imageSrc: `/Fruits/F_big_${i + 1}.png`,
