@@ -113,7 +113,8 @@ const App: React.FC = () => {
     const handleResize = () => {
       if (containerRef.current) {
         const { clientWidth, clientHeight } = containerRef.current;
-        const padding = 40;
+        // Use tighter padding on small screens so the canvas fits better
+        const padding = window.innerWidth < 640 ? 16 : 40;
         
         // Calculate scale to fit either width or height within container
         const scaleX = (clientWidth - padding) / CANVAS_WIDTH;
@@ -168,7 +169,7 @@ const App: React.FC = () => {
     <div className="h-screen w-full bg-[#f2f2f7] flex flex-col items-center relative overflow-hidden font-sans">
       
       {/* --- Top Floating Bar --- */}
-      <div className="absolute top-0 left-0 right-0 p-4 sm:p-6 flex justify-end items-start z-20 pointer-events-none">
+      <div className="absolute top-0 left-0 right-0 p-3 sm:p-6 flex justify-end items-start z-20 pointer-events-none">
         
         {/* Action Group */}
         <div className="flex gap-3 pointer-events-auto">
@@ -230,7 +231,7 @@ const App: React.FC = () => {
       </div>
 
       {/* --- Bottom Dock (Drawing Tools) --- */}
-      <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-30 w-[95%] max-w-4xl">
+      <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-30 w-[98%] max-w-[520px] sm:max-w-4xl">
         <div className="bg-white/90 backdrop-blur-2xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-[2rem] p-3 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 justify-between overflow-visible">
             
             {/* Left: Tools & Size */}
