@@ -126,13 +126,20 @@ const App: React.FC = () => {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
+  const exitDoodling = () => {
+    setShowDoodling(false);
+    setCurrentRoute('');
+    // Clear the hash so subsequent taps on "Doodling" trigger navigation again
+    window.location.hash = '';
+  };
+
   // If doodling is selected, show the doodling editor
   if (showDoodling) {
     return (
       <div className="min-h-screen w-full flex flex-col">
         <div className="animate-fade-in">
           <DoodlingEditor 
-            onBack={() => setShowDoodling(false)} 
+            onBack={exitDoodling} 
           />
         </div>
       </div>
