@@ -188,8 +188,6 @@ const App: React.FC = () => {
            <div className="flex items-center gap-1 bg-white/80 backdrop-blur-xl p-1.5 rounded-full shadow-sm border border-white/40">
               <IconButton onClick={() => canvasRef.current?.undo()} icon={<ArrowUturnLeftIcon className="w-5 h-5" />} disabled={!canUndo} label="Undo" />
               <IconButton onClick={() => canvasRef.current?.redo()} icon={<ArrowUturnRightIcon className="w-5 h-5" />} disabled={!canRedo} label="Redo" />
-              <div className="w-px h-5 bg-slate-300 mx-1"></div>
-              <IconButton onClick={() => canvasRef.current?.clearCanvas()} icon={<TrashIcon className="w-5 h-5 text-red-500" />} label="Clear" />
            </div>
            
            {/* Download */}
@@ -239,7 +237,7 @@ const App: React.FC = () => {
             {/* Left: Tools & Size */}
             <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-start">
                {/* Tool Switcher */}
-               <div className="bg-slate-100 p-1 rounded-full flex shrink-0">
+               <div className="bg-slate-100 p-1 rounded-full flex shrink-0 gap-1.5">
                   <button 
                     onClick={() => setTool(ToolType.PEN)}
                     className={`p-3 rounded-full transition-all ${tool === ToolType.PEN ? 'bg-white shadow text-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
@@ -253,6 +251,13 @@ const App: React.FC = () => {
                     title="Eraser"
                   >
                     <EraserToolIcon className="w-6 h-6" />
+                  </button>
+                  <button 
+                    onClick={() => canvasRef.current?.clearCanvas()}
+                    className="p-3 rounded-full transition-all text-red-500 hover:text-red-600 hover:bg-white shadow"
+                    title="Delete"
+                  >
+                    <TrashIcon className="w-6 h-6" />
                   </button>
                </div>
 
