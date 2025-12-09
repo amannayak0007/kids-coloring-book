@@ -7,7 +7,6 @@ import {
   ArrowUturnRightIcon,
   ArrowDownTrayIcon,
   SparklesIcon,
-  Square2StackIcon,
   ArrowPathIcon,
   ArrowsRightLeftIcon,
   TrashIcon
@@ -149,6 +148,10 @@ const App: React.FC = () => {
 
   const handleRotation = () => setShape(prev => ({ ...prev, rotation: prev.rotation + 90 }));
   const handleFlip = () => setShape(prev => ({ ...prev, scaleX: prev.scaleX * -1 }));
+  const handleRandomShape = () => {
+    const type = Math.random() > 0.5 ? 'organic' : 'geometric';
+    generateNewShape(type);
+  };
 
   const handleDownload = async () => {
     if (!canvasRef.current) return;
@@ -175,8 +178,7 @@ const App: React.FC = () => {
         <div className="flex gap-3 pointer-events-auto">
            {/* Shape Controls */}
            <div className="flex items-center gap-1 bg-white/80 backdrop-blur-xl p-1.5 rounded-full shadow-sm border border-white/40">
-              <IconButton onClick={() => generateNewShape('organic')} icon={<SparklesIcon className="w-5 h-5" />} label="Blob" />
-              <IconButton onClick={() => generateNewShape('geometric')} icon={<Square2StackIcon className="w-5 h-5" />} label="Geo" />
+              <IconButton onClick={handleRandomShape} icon={<SparklesIcon className="w-5 h-5" />} label="Random shape" />
               <div className="w-px h-5 bg-slate-300 mx-1"></div>
               <IconButton onClick={handleRotation} icon={<ArrowPathIcon className="w-5 h-5" />} label="Rotate" />
               <IconButton onClick={handleFlip} icon={<ArrowsRightLeftIcon className="w-5 h-5" />} label="Flip" />
